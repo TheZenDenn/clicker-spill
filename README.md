@@ -1,6 +1,10 @@
 # git download
 https://git-scm.com/downloads
 
+## komandoer 
+``` git config --global user.name "Ola Nordmann" ```
+``` git config --global user.email "ola.nordmann@gmail.com" ```
+``` npm install ```
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
 ## Creating a project
