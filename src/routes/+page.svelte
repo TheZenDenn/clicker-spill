@@ -1,4 +1,6 @@
 <script>
+    import kjeks from "$lib/bilder/kjeks.png";
+
     let antallOppgradering = 0
     let poeng = 0
     let eksponent = 1.3
@@ -41,8 +43,9 @@
 }
     
     </script>
-    
-    <button on:click={faaPoeng}>Trykk</button>
+    <p>Trykk på kjeksen</p>
+    <a href="" on:click={faaPoeng}><img src="{kjeks}" alt=""></a>
+    <!--<button on:click={faaPoeng}>Trykk</button>-->
     <h1>Kjeks Clicker</h1>
     <button on:click={oppgradering}>Kjøp oppgradering</button>
     <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
