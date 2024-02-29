@@ -1,6 +1,7 @@
 <script>
 let antallOppgradering = 0
 let poeng = 0
+let test = 0
 function faaPoeng(){
 poeng = poeng + (1 + antallOppgradering)
 }
