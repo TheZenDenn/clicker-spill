@@ -18,7 +18,7 @@
     setInterval(function(){ 
     poeng = poeng + (1+antallAutoOppgradering)   
 }, 1000);
-
+    /* deprecated
     //Oppgraderinger. Sjekke hvor mange kjeks man har, og trekke fra prisen av oppgradering. 
     function oppgradering(){
         if (poeng >= pris){
@@ -45,18 +45,19 @@
             alert("Ikke nok poeng")
         }
    
-}
-
-    function upgrade(pris, multi) {
-        if (pris > poeng) {
+}*/
+    /**
+     * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
+     * @param pris
+     * @param addition
+     */
+    function upgrade(pris, addition) {
+        if (pris > poeng)
             return;
-        }
-
-        antallAutoOppgradering *= multi;
+        
+        antallAutoOppgradering += addition;
         poeng -= pris;
         console.log(pris, antallAutoOppgradering);
-
-
     }
     
     </script>
@@ -67,10 +68,10 @@
     <button on:click={oppgradering}>Kjøp oppgradering</button>
     <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
 -->
-
+    <p>Cookes per sekund {antallAutoOppgradering}</p>
     <div class="shop">
         {#each items as item}
-            <button on:click={() => {upgrade(item.pris, item.multi)}}>{item.navn} - {item.pris} cookies</button>
+            <button on:click={() => {upgrade(item.pris, item.addition)}}>{item.navn} - {item.pris} cookies</button>
         {/each}
     </div>
     <p>{poeng}</p>
@@ -78,7 +79,6 @@
     
     
     <style>
-    
         .shop {
             float: right;
             display: block;
