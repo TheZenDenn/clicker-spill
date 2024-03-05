@@ -15,3 +15,4 @@ https://git-scm.com/downloads
 - vanlig cookie clicker ellers
 - add blackjack
 - add texas holdem
+- add lootboxes med keys og weapons skins
