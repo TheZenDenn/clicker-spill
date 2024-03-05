@@ -47,33 +47,45 @@
    
 }
 
-function upgrade(pris, multi) {
-    if (pris > poeng) {
-        return;
+    function upgrade(pris, multi) {
+        if (pris > poeng) {
+            return;
+        }
+
+        antallAutoOppgradering *= multi;
+        poeng -= pris;
+        console.log(pris, antallAutoOppgradering);
+
+
     }
-
-    antallAutoOppgradering *= multi;
-    poeng -= pris;
-    console.log(pris, antallAutoOppgradering);
-
-
-}
     
     </script>
     <p>Trykk på kjeksen</p>
     <a href="" on:click={faaPoeng}><img src="{kjeks}" alt=""></a>
     <!--<button on:click={faaPoeng}>Trykk</button>-->
-    <h1>Kjeks Clicker</h1>
+    <h1>Kjeks Clicker</h1><!--
     <button on:click={oppgradering}>Kjøp oppgradering</button>
     <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
+-->
 
+    <div class="shop">
+        {#each items as item}
+            <button on:click={() => {upgrade(item.pris, item.multi)}}>{item.navn} - {item.pris} cookies</button>
+        {/each}
+    </div>
     <p>{poeng}</p>
     <p>{pris}</p>
     
     
     <style>
     
-    
+        .shop {
+            float: right;
+            display: block;
+        }
+        .shop button {
+            width: 100%;
+        }
     
     </style>
     
