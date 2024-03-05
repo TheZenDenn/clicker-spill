@@ -3,7 +3,8 @@
     import cookie from "$lib/bilder/cookie.jpg"
     import {items} from "$lib/meny";
 
-    let antallOppgradering = 0
+    let antallCookiesTotalt = 0;
+    let antallOppgradering = 1;
     let poeng = 0
     let eksponent = 1.3
     let k = 1 
@@ -12,72 +13,49 @@
     
     //Trykke for på kjeksen for å få kjeks
     function faaPoeng(){
-    poeng = poeng + (1 + antallOppgradering)
+        poeng += antallOppgradering
+        antallCookiesTotalt += antallAutoOppgradering; 
+        console.log(antallAutoOppgradering);
     }
 
     //Automatisk få kjeks hvert sekund
     setInterval(function(){ 
-    poeng = poeng + (1+antallAutoOppgradering)   
-}, 1000);
-
-    //Oppgraderinger. Sjekke hvor mange kjeks man har, og trekke fra prisen av oppgradering. 
-    function oppgradering(){
-        if (poeng >= pris){
-        poeng = poeng - pris
-        antallOppgradering = antallOppgradering +1 
-        k = k + 1 
-        //Prisskifte
-        pris = Math.round (10 * (k**eksponent))
-     }
-        else {
-            alert("Ikke nok poeng")
-        }
-    }
-
-    //Automatisk kjeks oppgradering 
-        function autoOppgradering(){
-        if (poeng >= pris){
-        poeng = poeng - pris
-        antallAutoOppgradering = antallAutoOppgradering +1 
-        k = k + 1 
-        pris = Math.round (10 * (k**eksponent))
-     }
-        else {
-            alert("Ikke nok poeng")
-        }
-   
-}
-
-    function upgrade(pris, multi) {
-        if (pris > poeng) {
+        faaPoeng();
+        //poeng = poeng + (1+antallAutoOppgradering)  
+        
+    }, 1000);
+    /**
+     * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
+     * @param pris
+     * @param addition
+     */
+    function upgrade(pris, addition) {
+        if (pris > poeng)
             return;
-        }
-
-        antallAutoOppgradering *= multi;
+        
+        antallAutoOppgradering += addition;
         poeng -= pris;
-        console.log(pris, antallAutoOppgradering);
-
-
+        //console.log(pris, antallAutoOppgradering);
     }
     
     </script>
     <p>Trykk på kjeksen</p>
-    <a href="" on:click={faaPoeng}><img src="{kjeks}" alt=""></a>
+    <h1 on:click={() => {faaPoeng();}}><img src="{kjeks}" alt=""></h1>
     <!--<button on:click={faaPoeng}>Trykk</button>-->
-    <h1>Kjeks Clicker</h1>
-    
+    <h1>Kjeks Clicker</h1><!--
+    <button on:click={oppgradering}>Kjøp oppgradering</button>
+    <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
+-->
 
     <div class="shop">
         {#each items as item}
-            <button on:click={() => {upgrade(item.pris, item.multi)}}>{item.navn} - {item.pris} cookies</button>
+            <button on:click={() => {upgrade(item.pris, item.addition)}}>{item.navn} - {item.pris} cookies</button>
         {/each}
     </div>
-    <p>{poeng}</p>
-    <p>{pris}</p>
+    
     
     
     <style>
-    
         .shop {
             float: right;
             display: block;
@@ -86,7 +64,6 @@
             width: 100%;
         }
     
-        
     </style>
     
     
