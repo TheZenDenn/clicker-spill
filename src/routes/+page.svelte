@@ -7,7 +7,7 @@
     let antallAutoOppgradering = 1;
     
     //Trykke for på kjeksen for å få kjeks
-    function faaPoeng(){
+    function faaPoeng(ting){
         poeng += antallAutoOppgradering
         antallCookiesTotalt += antallAutoOppgradering;
     }
