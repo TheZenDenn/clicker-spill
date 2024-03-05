@@ -3,25 +3,18 @@
     import {items} from "$lib/meny";
 
     let antallCookiesTotalt = 0;
-    let antallOppgradering = 1;
-    let poeng = 0
-    let eksponent = 1.3
-    let k = 1 
-    let pris = Math.round(10 * (k**eksponent))
-    let antallAutoOppgradering = 1
+    let poeng = 0;
+    let antallAutoOppgradering = 1;
     
     //Trykke for på kjeksen for å få kjeks
-    function faaPoeng(){
-        poeng += antallOppgradering
-        antallCookiesTotalt += antallAutoOppgradering; 
-        console.log(antallAutoOppgradering);
+    function faaPoeng(ting){
+        poeng += antallAutoOppgradering
+        antallCookiesTotalt += antallAutoOppgradering;
     }
 
     //Automatisk få kjeks hvert sekund
     setInterval(function(){ 
-        faaPoeng();
-        //poeng = poeng + (1+antallAutoOppgradering)  
-        
+        faaPoeng(); 
     }, 1000);
     /**
      * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
@@ -40,14 +33,9 @@
     </script>
     <p>Trykk på kjeksen</p>
     <h1 on:click={() => {faaPoeng();}}><img src="{kjeks}" alt=""></h1>
-    <!--<button on:click={faaPoeng}>Trykk</button>-->
-    <h1>Kjeks Clicker</h1><!--
-    <button on:click={oppgradering}>Kjøp oppgradering</button>
-    <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
--->
 
-
-<p>Cookes per sekund {antallAutoOppgradering}</p>
+    <h1>Kjeks Clicker</h1>
+    <p>Cookes per sekund {antallAutoOppgradering}</p>
     <div class="stats">
         <h2>Stats</h2>
         <p>Poeng: {poeng}</p>
