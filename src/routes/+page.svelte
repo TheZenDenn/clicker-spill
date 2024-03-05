@@ -3,25 +3,18 @@
     import {items} from "$lib/meny";
 
     let antallCookiesTotalt = 0;
-    let antallOppgradering = 1;
-    let poeng = 0
-    let eksponent = 1.3
-    let k = 1 
-    let pris = Math.round(10 * (k**eksponent))
-    let antallAutoOppgradering = 1
+    let poeng = 0;
+    let antallAutoOppgradering = 1;
     
     //Trykke for på kjeksen for å få kjeks
     function faaPoeng(){
-        poeng += antallOppgradering
-        antallCookiesTotalt += antallAutoOppgradering; 
-        console.log(antallAutoOppgradering);
+        poeng += antallAutoOppgradering
+        antallCookiesTotalt += antallAutoOppgradering;
     }
 
     //Automatisk få kjeks hvert sekund
     setInterval(function(){ 
-        faaPoeng();
-        //poeng = poeng + (1+antallAutoOppgradering)  
-        
+        faaPoeng(); 
     }, 1000);
     /**
      * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
