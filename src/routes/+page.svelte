@@ -2,7 +2,8 @@
     import kjeks from "$lib/bilder/kjeks.png";
     import {items} from "$lib/meny";
 
-    let antallOppgradering = 0
+    let antallCookiesTotalt = 0;
+    let antallOppgradering = 1;
     let poeng = 0
     let eksponent = 1.3
     let k = 1 
@@ -11,41 +12,17 @@
     
     //Trykke for på kjeksen for å få kjeks
     function faaPoeng(){
-    poeng = poeng + (1 + antallOppgradering)
+        poeng += antallOppgradering
+        antallCookiesTotalt += antallAutoOppgradering; 
+        console.log(antallAutoOppgradering);
     }
 
     //Automatisk få kjeks hvert sekund
     setInterval(function(){ 
-    poeng = poeng + (1+antallAutoOppgradering)   
-}, 1000);
-    /* deprecated
-    //Oppgraderinger. Sjekke hvor mange kjeks man har, og trekke fra prisen av oppgradering. 
-    function oppgradering(){
-        if (poeng >= pris){
-        poeng = poeng - pris
-        antallOppgradering = antallOppgradering +1 
-        k = k + 1 
-        //Prisskifte
-        pris = Math.round (10 * (k**eksponent))
-     }
-        else {
-            alert("Ikke nok poeng")
-        }
-    }
-
-    //Automatisk kjeks oppgradering 
-        function autoOppgradering(){
-        if (poeng >= pris){
-        poeng = poeng - pris
-        antallAutoOppgradering = antallAutoOppgradering +1 
-        k = k + 1 
-        pris = Math.round (10 * (k**eksponent))
-     }
-        else {
-            alert("Ikke nok poeng")
-        }
-   
-}*/
+        faaPoeng();
+        //poeng = poeng + (1+antallAutoOppgradering)  
+        
+    }, 1000);
     /**
      * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
      * @param pris
@@ -57,25 +34,30 @@
         
         antallAutoOppgradering += addition;
         poeng -= pris;
-        console.log(pris, antallAutoOppgradering);
+        //console.log(pris, antallAutoOppgradering);
     }
     
     </script>
     <p>Trykk på kjeksen</p>
-    <a href="" on:click={faaPoeng}><img src="{kjeks}" alt=""></a>
+    <h1 on:click={() => {faaPoeng();}}><img src="{kjeks}" alt=""></h1>
     <!--<button on:click={faaPoeng}>Trykk</button>-->
     <h1>Kjeks Clicker</h1><!--
     <button on:click={oppgradering}>Kjøp oppgradering</button>
     <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
 -->
     <p>Cookes per sekund {antallAutoOppgradering}</p>
+    <div class="stats">
+        <h2>Stats</h2>
+        <p>Poeng: {poeng}</p>
+        <p>Antall cookies totalt {antallCookiesTotalt}</p>
+    </div>
+
     <div class="shop">
         {#each items as item}
             <button on:click={() => {upgrade(item.pris, item.addition)}}>{item.navn} - {item.pris} cookies</button>
         {/each}
     </div>
-    <p>{poeng}</p>
-    <p>{pris}</p>
+    
     
     
     <style>
@@ -86,7 +68,10 @@
         .shop button {
             width: 100%;
         }
-    
+        .stats {
+            text-align: center;
+
+        }
     </style>
     
     
