@@ -1,6 +1,5 @@
 <script>
     import kjeks from "$lib/bilder/kjeks.png";
-    import cookie from "$lib/bilder/cookie.jpg"
     import {items} from "$lib/meny";
 
     let antallCookiesTotalt = 0;
@@ -46,6 +45,14 @@
     <button on:click={oppgradering}>Kjøp oppgradering</button>
     <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
 -->
+
+
+<p>Cookes per sekund {antallAutoOppgradering}</p>
+    <div class="stats">
+        <h2>Stats</h2>
+        <p>Poeng: {poeng}</p>
+        <p>Antall cookies totalt {antallCookiesTotalt}</p>
+</div>
 
     <div class="shop">
         {#each items as item}
