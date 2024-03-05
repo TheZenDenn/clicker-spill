@@ -8,20 +8,23 @@
     let pris = Math.round(10 * (k**eksponent))
     let antallAutoOppgradering = 0
     
-
+    //Trykke for på kjeksen for å få kjeks
     function faaPoeng(){
     poeng = poeng + (1 + antallOppgradering)
     }
 
+    //Automatisk få kjeks hvert sekund
     setInterval(function(){ 
     poeng = poeng + (1+antallAutoOppgradering)   
 }, 1000);
 
+    //Oppgraderinger. Sjekke hvor mange kjeks man har, og trekke fra prisen av oppgradering. 
     function oppgradering(){
         if (poeng >= pris){
         poeng = poeng - pris
         antallOppgradering = antallOppgradering +1 
         k = k + 1 
+        //Prisskifte
         pris = Math.round (10 * (k**eksponent))
      }
         else {
@@ -29,6 +32,7 @@
         }
     }
 
+    //Automatisk kjeks oppgradering 
         function autoOppgradering(){
         if (poeng >= pris){
         poeng = poeng - pris
@@ -50,7 +54,7 @@
     <button on:click={oppgradering}>Kjøp oppgradering</button>
     <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
 
-    <p>{poeng}</p>
+    <p>{poeng} Kjeks</p>
     <p>{pris}</p>
     
     
