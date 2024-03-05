@@ -1,5 +1,6 @@
 <script>
     import kjeks from "$lib/bilder/kjeks.png";
+    import cookie from "$lib/bilder/cookie.jpg"
     import {items} from "$lib/meny";
 
     let antallOppgradering = 0
@@ -63,10 +64,8 @@
     <p>Trykk på kjeksen</p>
     <a href="" on:click={faaPoeng}><img src="{kjeks}" alt=""></a>
     <!--<button on:click={faaPoeng}>Trykk</button>-->
-    <h1>Kjeks Clicker</h1><!--
-    <button on:click={oppgradering}>Kjøp oppgradering</button>
-    <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
--->
+    <h1>Kjeks Clicker</h1>
+    
 
     <div class="shop">
         {#each items as item}
@@ -87,6 +86,7 @@
             width: 100%;
         }
     
+        
     </style>
     
     
