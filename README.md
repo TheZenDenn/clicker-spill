@@ -1,4 +1,6 @@
-# git download
+# clicker spill
+
+## git download
 https://git-scm.com/downloads
 
 ## komandoer 
