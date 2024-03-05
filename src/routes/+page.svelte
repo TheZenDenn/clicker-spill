@@ -1,62 +1,63 @@
 <script>
     import kjeks from "$lib/bilder/kjeks.png";
+    import {items} from "$lib/meny";
 
-    let antallOppgradering = 0
-    let poeng = 0
-    let eksponent = 1.3
-    let k = 1 
-    let pris = Math.round(10 * (k**eksponent))
-    let antallAutoOppgradering = 0
+    let antallCookiesTotalt = 0;
+    let poeng = 0;
+    let antallAutoOppgradering = 1;
     
-
-    function faaPoeng(){
-    poeng = poeng + (1 + antallOppgradering)
+    //Trykke for på kjeksen for å få kjeks
+    function faaPoeng(ting){
+        poeng += antallAutoOppgradering
+        antallCookiesTotalt += antallAutoOppgradering;
     }
 
+    //Automatisk få kjeks hvert sekund
     setInterval(function(){ 
-    poeng = poeng + (1+antallAutoOppgradering)   
-}, 1000);
-
-    function oppgradering(){
-        if (poeng >= pris){
-        poeng = poeng - pris
-        antallOppgradering = antallOppgradering +1 
-        k = k + 1 
-        pris = Math.round (10 * (k**eksponent))
-     }
-        else {
-            alert("Ikke nok poeng")
-        }
+        faaPoeng(); 
+    }, 1000);
+    /**
+     * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
+     * @param pris
+     * @param addition
+     */
+    function upgrade(pris, addition) {
+        if (pris > poeng)
+            return;
+        
+        antallAutoOppgradering += addition;
+        poeng -= pris;
+        //console.log(pris, antallAutoOppgradering);
     }
-
-        function autoOppgradering(){
-        if (poeng >= pris){
-        poeng = poeng - pris
-        antallAutoOppgradering = antallAutoOppgradering +1 
-        k = k + 1 
-        pris = Math.round (10 * (k**eksponent))
-     }
-        else {
-            alert("Ikke nok poeng")
-        }
-   
-}
     
     </script>
     <p>Trykk på kjeksen</p>
-    <a href="" on:click={faaPoeng}><img src="{kjeks}" alt=""></a>
-    <!--<button on:click={faaPoeng}>Trykk</button>-->
-    <h1>Kjeks Clicker</h1>
-    <button on:click={oppgradering}>Kjøp oppgradering</button>
-    <button on:click={autoOppgradering}>Kjøp auto oppgradering</button>
+    <h1 on:click={() => {faaPoeng();}}><img src="{kjeks}" alt=""></h1>
 
-    <p>{poeng}</p>
-    <p>{pris}</p>
+    <h1>Kjeks Clicker</h1>
+    <p>Cookes per sekund {antallAutoOppgradering}</p>
+    <div class="stats">
+        <h2>Stats</h2>
+        <p>Poeng: {poeng}</p>
+        <p>Antall cookies totalt {antallCookiesTotalt}</p>
+</div>
+
+    <div class="shop">
+        {#each items as item}
+            <button on:click={() => {upgrade(item.pris, item.addition)}}>{item.navn} - {item.pris} cookies</button>
+        {/each}
+    </div>
+    
     
     
     <style>
-    
-    
+        .shop {
+            float: right;
+            display: block;
+        }
+        .shop button {
+            width: 100%;
+        }
     
     </style>
     
