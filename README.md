@@ -13,3 +13,5 @@ https://git-scm.com/downloads
 ## idéer til spillet
 - minigame som man får cookies og boosts av
 - vanlig cookie clicker ellers
+- add blackjack
+- add texas holdem
