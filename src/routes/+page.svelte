@@ -1,12 +1,25 @@
 <script>
     import kjeks from "$lib/bilder/kjeks.png";
     import {items} from "$lib/meny";
-    import * as localstorageAPI from "$lib/localstorageAPI"; 
+    import * as localstorageAPI from "$lib/localstorageAPI";
+    import Lootbox from "$lib/modules/lootbox.svelte" 
+    import * as gambling from "$lib/gambling";
+    import {sleep} from "$lib/index";
+
+    /**
+     * Disable denne før production.
+     */
+    const debug = true;
+    let debugPoeng = 0; 
 
     let antallFysiskeKlikk = 0;
     let antallCookiesTotalt = 0;
     let poeng = 0;
     let antallAutoOppgradering = 1;
+    /**
+     * Viser errorfunds melding. Bruk errorFunds funksjon eller lag en lignende.
+     */
+    let error = false;
 
     //få lagrede data først - hvis ikke default
     async function getSave() {
@@ -25,6 +38,11 @@
     function faaPoeng(){
         poeng += antallAutoOppgradering
         antallCookiesTotalt += antallAutoOppgradering;
+
+        if (poeng > antallCookiesTotalt) { //gambling hotfix
+            let diff = poeng - antallCookiesTotalt;
+            antallCookiesTotalt += diff;
+        }
     }
 
     let timeForAutosave = 10 * 1000;
@@ -46,15 +64,59 @@
      */
     function upgrade(pris, addition) {
         if (pris > poeng)
-            return;
+            return errorFunds();
         
         antallAutoOppgradering += addition;
         poeng -= pris;
     }
+    let lootboxVis = false;
+    /**
+     * @type {string}
+     */
+    let winner;
+    const lootboxCB = async () => {
+        console.log(poeng);
+        poeng = await gambling.lootBoxResults(winner, poeng);
+        console.log(poeng);
+    }
+
+    function kjøpLootbox(pris = 1000) {
+        if (typeof(pris) != "number") 
+            throw "pris trenger å bli gitt i svelte for en eller annen grunn. Dev feil fra deg, ikke meg";
+
+        if (poeng < pris) 
+            return errorFunds();
+
+        
+        poeng -= pris;
+        console.log(poeng, pris);
+        lootboxVis = true;
+    } 
+
+    async function errorFunds() {
+        error = true;
+        await sleep(500);
+        error = false;
+    }
+
 </script>
-    <h1>Todo: Lage en måte å save en fil - eksportere/importere den</h1>
+    {#if debug}
+        Set poeng: <input type="number" bind:value={debugPoeng}> <button on:click={() => poeng = debugPoeng}>Set poeng</button>
+    {/if}
+    {#if error} 
+        <p>Ikke nok cookies!</p>
+    {/if}
+    <div class="minigames">
+        {#if lootboxVis}
+            <Lootbox items={gambling.lootboxOptions} bind:winner={winner} callback={lootboxCB}/>
+            {#if winner}
+            <button on:click={() => {lootboxVis = false; winner = undefined;}}>Lukk lootbox</button>
+            {/if}
+        {/if}
+    </div>
+
     <div class="master">
-        {#key antallFysiskeKlikk}
+        {#key antallFysiskeKlikk} <!-- animasjon ting -->
         <div class="kjeks"><h1 on:click={() => {faaPoeng(); antallFysiskeKlikk = antallFysiskeKlikk + 1;}}><img src="{kjeks}" alt=""></h1></div>
     
         {/key}
@@ -65,6 +127,11 @@
             <h2>Stats</h2>
             <p>Poeng: {poeng}</p>
             <p>Antall cookies totalt {antallCookiesTotalt}</p>
+            <button on:click={() => kjøpLootbox()}>Åpne Lootbox (1000 cookies)!</button>
+            <button>Spill Memory Card!</button>
+            <button>Spill Poker!</button>
+            <button>Spill Blackjack!</button>
+            <button>Spill Slots!</button>
         </div>
 
         <div class="shop grid">
@@ -74,26 +141,49 @@
         </div>
     
     </div>
-    <style>
-        @keyframes kjeks {
-            0% {
-                transform: scale(0.85);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
+<style>
+    .minigames {
+        position: absolute;
+        background-color: aliceblue;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
 
-        .kjeks {
-            animation: kjeks 0.15s;
-        }
+    .minigames:empty {
+        display: none;
+    }
 
-        .master {
-            display: grid;
-            grid-template-columns: 30vw 40vw 30vw ;
-        } 
-        .grid {
-            display: inline-grid;
+    @keyframes kjeks {
+        0% {
+            transform: scale(0.85);
         }
-    
-    </style>
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .kjeks {
+        animation: kjeks 0.15s;
+    }
+
+    .master {
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-column: 1 / -1;
+        grid-template-columns: 30vw 40vw 30vw ;
+        height: 100vh;
+        width: 100%;
+        gap: 0;
+    } 
+    .grid {
+        display: inline-grid;
+        overflow: scroll;
+    }
+
+    .shop button {
+        height: 50px;
+        gap: 0;
+    }
+</style>

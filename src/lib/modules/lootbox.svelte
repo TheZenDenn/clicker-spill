@@ -9,6 +9,7 @@
         "seks"
     ];
     export let winner = undefined;
+    export let callback = () =>  {alert("Du vant " + winner)};
     /**
      * Dette er en test
      * @param items
@@ -39,13 +40,14 @@
         //bestem en vinner
         let vinner = finnRandom(items);
         
-        let times = 20;
+        let times = 30;
         let sleepTime = 100;
         /**
          * Må gjøre denne frem til at aktiv[2] er den vi vil ha
         */
         for (let i = 0; i < times; i++) {
             // @ts-ignore
+            //aktiv.push(aktiv.shift())
             aktiv.unshift(aktiv.pop());
             aktiv = aktiv;
             //gjør dette bedre - js er fortsatt js
@@ -55,6 +57,7 @@
         while (aktivString != vinner[0]) {
             // @ts-ignore
             aktiv.unshift(aktiv.pop());
+            //aktiv.push(aktiv.shift())
             aktiv = aktiv; //svelte update call
             aktivString = aktiv[2]
 
@@ -62,12 +65,14 @@
         } 
         winner = vinner[0];
 
+        callback();
         await sleep(2000);
         if (resetKnappVis)
             knappVis = true;
 
     }
-    let knappVis = true;
+    let knappVis = false; //legacy 
+    openLootbox();
 </script>
 <!--
     @component
@@ -89,14 +94,13 @@
 
 <div class="altlootbox">
 
-
 <div class="lootbox">
-    {#if knappVis}
+    <!--{#if knappVis}
         <div class="knapp">
             <button on:click={() => {openLootbox(); knappVis = knappVis ? false : true;}}>Spin hjul og vinn!</button>
         </div>
-    {/if}
-    {#if !knappVis}
+    {/if}-->
+    {#if true} <!--legacy-->
         <div class="fade" transition:fade={{duration: 400}}>
             {#each aktiv as item, i}
             {#if i < 5}
@@ -128,6 +132,7 @@
         padding: 1em;
         margin: 1em;
         border: 2px solid teal;
+        width: 5em;
     }
 
     .vinner {
