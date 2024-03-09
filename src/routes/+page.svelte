@@ -110,7 +110,8 @@
         {#if lootboxVis}
             <Lootbox items={gambling.lootboxOptions} bind:winner={winner} callback={lootboxCB}/>
             {#if winner}
-            <button on:click={() => {lootboxVis = false; winner = undefined;}}>Lukk lootbox</button>
+            <button class="gamblingknapp" on:click={() => {lootboxVis = false; winner = undefined;}}>Lukk lootbox</button>
+            <button id="spilligjen" class="gamblingknapp" on:click={async () => {lootboxVis = false; winner = undefined; await sleep(500); kjøpLootbox();}}>Spill igjen!</button>
             {/if}
         {/if}
     </div>
@@ -142,6 +143,43 @@
     
     </div>
 <style>
+    @property --x {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+    }
+    .gamblingknapp {
+        float: right;
+        padding: 0.25em;
+        font-size: 10px;
+    }
+    #spilligjen {
+        font-size: larger;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.5em;
+        margin: 1em;
+        float: none;
+        text-align: center;
+        /*background-color: gold;*/
+        background: radial-gradient(ellipse farthest-corner at var(--x) 0%, #FFFFFF 0%, rgb(255, 237, 137) 8%, rgb(247, 220, 71) 25%, rgb(248, 214, 23) 62.5%, gold 100%);
+        animation: colourChange 3s infinite alternate;
+
+    }
+
+    @keyframes colourChange { /*stavet på den riktige måten*/
+        0% {
+            --x:0%;
+        }
+        50% {
+            --x:50%;
+        }
+        100% {
+            --x:100%;
+        }
+    }
+
     .minigames {
         position: absolute;
         background-color: aliceblue;

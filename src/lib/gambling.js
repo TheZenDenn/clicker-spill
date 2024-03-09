@@ -9,6 +9,7 @@ export const lootboxOptions1 = [
     "+1000",
     "+500",
     "-50000",
+    "-50000",
 ];
 
 export const lootboxOptions = lootboxOptions1.map((a) => a + " cookies"); 

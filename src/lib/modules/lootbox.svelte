@@ -1,5 +1,6 @@
 <script>
-    import {fade} from "svelte/transition";
+    import {fade, slide, fly} from "svelte/transition";
+    import Gambling from "$lib/modules/gambling.svelte"
     export let items = [ /* burde kunne ha så mange som man har lyst til */ 
         "item1",
         "item2",
@@ -34,7 +35,16 @@
      * @type {string}
      */
     let aktivString = "-1";
+    let aniIndex = 0;
     const sleep = (/** @type {number} */ ms) => new Promise(r => setTimeout(r, ms));
+    function doBasic() {
+        aniIndex++;
+            if (aniIndex > items.length)
+                aniIndex = 0;
+        
+        aktiv.unshift(aktiv.pop());
+        aktiv = aktiv;
+    }
     async function openLootbox() {
         await sleep(1000);
         //bestem en vinner
@@ -46,19 +56,13 @@
          * Må gjøre denne frem til at aktiv[2] er den vi vil ha
         */
         for (let i = 0; i < times; i++) {
-            // @ts-ignore
-            //aktiv.push(aktiv.shift())
-            aktiv.unshift(aktiv.pop());
-            aktiv = aktiv;
+            doBasic();
             //gjør dette bedre - js er fortsatt js
             if (i > (times * 0.6)) { await sleep(sleepTime * 2); continue;}
             await sleep(sleepTime);
         }
         while (aktivString != vinner[0]) {
-            // @ts-ignore
-            aktiv.unshift(aktiv.pop());
-            //aktiv.push(aktiv.shift())
-            aktiv = aktiv; //svelte update call
+            doBasic()
             aktivString = aktiv[2]
 
             await sleep(sleepTime)
@@ -92,31 +96,50 @@
     ```
 -->
 
-<div class="altlootbox">
+<div class="altlootbox" in:slide out:slide>
 
-<div class="lootbox">
-    <!--{#if knappVis}
-        <div class="knapp">
-            <button on:click={() => {openLootbox(); knappVis = knappVis ? false : true;}}>Spin hjul og vinn!</button>
-        </div>
-    {/if}-->
-    {#if true} <!--legacy-->
+    <div class="lootbox">
+        <Gambling tittel="Lootbox"/>
         <div class="fade" transition:fade={{duration: 400}}>
+            {#key aktiv}
             {#each aktiv as item, i}
-            {#if i < 5}
-                {#if i == 2}
-                <div class="item vinner">{item}</div>
-                {:else}
-                <div class="item">{item}</div>
+                {#if i < 5}
+                    {#if i == 2} <!-- pain -->
+                    {#if aniIndex == i}
+                    <div class="item ani vinner">{item}</div>
+                    {:else}
+                    <div class="item vinner">{item}</div>
+                    {/if}
+                    {:else}
+                    {#if aniIndex == i}
+                    <div class="item ani">{item}</div>
+                    {:else}
+                    <div class="item">{item}</div>
+                    {/if}
+                    {/if}
                 {/if}
-            {/if}
-        {/each} 
+            {/each} 
+            {/key}
         </div>
-    {/if}
-</div>
+    </div>
 
 </div>
 <style>
+    @keyframes update {
+        0% {
+            transform: scale(0.85);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    .altlootbox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        transform: translate(-50%, -50%);
+    }
 
     .knapp {
         text-align: center;
@@ -131,15 +154,21 @@
         display: inline-block;
         padding: 1em;
         margin: 1em;
+        margin-bottom: 10em;
         border: 2px solid teal;
         width: 5em;
+        
+    }
+
+    .ani {
+        animation: update 0.15s;
     }
 
     .vinner {
         background: linear-gradient(gold, gold) no-repeat center/2px 100%;
         background-color: green;
         border: 3px solid gold;
-        padding: 1.5em;
+        padding: 1.8em;
     }
 
 </style>
