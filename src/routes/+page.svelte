@@ -27,10 +27,14 @@
         
         antallAutoOppgradering += addition;
         poeng -= pris;
+        
+
         //console.log(pris, antallAutoOppgradering);
     }
     
     </script>
+
+    <main>
     <p>Trykk på kjeksen</p>
     <h1 on:click={() => {faaPoeng();}}><img src="{kjeks}" alt=""></h1>
 
@@ -48,7 +52,7 @@
         {/each}
     </div>
     
-    
+</main>
     
     <style>
         .shop {
