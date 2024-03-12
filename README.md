@@ -16,3 +16,6 @@ https://git-scm.com/downloads
 - add blackjack
 - add texas holdem
 - add lootboxes med keys og weapons skins
+
+## Technical ting:
+- med tanke på hvor unbalenced spillet er, burde man kanskje bruke BigInt for poeng osv. Bare en tanke.
