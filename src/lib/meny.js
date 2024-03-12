@@ -1,6 +1,6 @@
 
 class menyitem {
-    constructor(pris = 5, addition = 1, navn = "Cookie destroyer") {
+    constructor(pris = 5, addition = 0, navn = "Cookie destroyer") {
         this.pris = pris;
         this.addition = addition;
         this.navn = navn;
