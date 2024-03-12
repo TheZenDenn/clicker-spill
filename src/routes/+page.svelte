@@ -6,6 +6,8 @@
     import * as gambling from "$lib/gambling";
     import {sleep} from "$lib/index";
 
+    let settings = false;
+
     /**
      * Disable denne før production.
      */
@@ -100,6 +102,14 @@
     }
 
 </script>
+    {#if settings}
+        <div class="settings">
+            test
+            <button on:click={() => settings = settings ? false : true}>Settings</button>
+            <button on:click={localstorageAPI.resetLagring}>Reset lagring</button>
+        </div>
+    {/if}
+
     {#if debug}
         Set poeng: <input type="number" bind:value={debugPoeng}> <button on:click={() => poeng = debugPoeng}>Set poeng</button>
     {/if}
@@ -124,6 +134,7 @@
 
         <div class="stats grid">
             <h1>Kjeks Clicker</h1>
+            <button on:click={() => settings = settings ? false : true}>Settings</button>
             <p>Cookes per sekund {antallAutoOppgradering}</p>
             <h2>Stats</h2>
             <p>Poeng: {poeng}</p>

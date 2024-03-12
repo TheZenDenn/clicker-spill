@@ -57,3 +57,14 @@ export async function removeData(item = "info") {
 
     localStorage.removeItem(item);
 }
+
+export async function resetLagring() {
+    if (!browser)
+        return;
+    if (!confirm("Ønsker du å slette alle dataene"))
+        return alert("Du slettet ikke dataene");
+
+    await removeAllData();
+    alert("Du slettet alle dataene");
+    location.reload();
+}
