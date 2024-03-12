@@ -19,6 +19,10 @@
     let poeng = 0;
     let antallAutoOppgradering = 1;
     /**
+     * @type {Object}
+     */
+    let aktivItems = {};
+    /**
      * Viser errorfunds melding. Bruk errorFunds funksjon eller lag en lignende.
      */
     let error = false;
@@ -33,6 +37,8 @@
         antallCookiesTotalt = data.AntallCookiesTotalt
         poeng = data.Poeng
         antallAutoOppgradering = data.CookiesPerSekund
+        aktivItems = data.ActiveItems
+        console.log(data)
     }
     getSave();
     
@@ -50,7 +56,7 @@
     let timeForAutosave = 10 * 1000;
     const autoSave = setInterval(async () => {
         //finn alle dataene 
-        let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering);
+        let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems);
         await localstorageAPI.writeData({...datastruct})
         console.log("Wrote data")
     }, timeForAutosave);
@@ -63,13 +69,21 @@
      * Oppgraderer basert etter pris og bestemmer hvor mye cookiespersekund øker med
      * @param {number} pris
      * @param {number} addition
+     * @param {string} navn
      */
-    function upgrade(pris, addition) {
+    function upgrade(pris, addition, navn, multiplier) {
+        if (aktivItems[navn])
+            pris = pris * aktivItems[navn] * multiplier;
+        console.log(pris, aktivItems[navn])
         if (pris > poeng)
             return errorFunds();
-        
+
         antallAutoOppgradering += addition;
         poeng -= pris;
+        if (aktivItems[navn]) 
+            aktivItems[navn] = aktivItems[navn] + 1;
+        else
+            aktivItems[navn] = 1;
     }
     let lootboxVis = false;
     /**
@@ -147,8 +161,15 @@
         </div>
 
         <div class="shop grid">
-            {#each items as item}
-                <button on:click={() => {upgrade(item.pris, item.addition)}}>{item.navn} - {item.pris} cookies</button>
+            {#each items as item, i}
+                {#key aktivItems}
+                {#if aktivItems[item.navn]}
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris * item.multiplier * aktivItems[item.navn]} cookies</button>
+                {:else}
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies</button>
+                {/if}
+                {/key}
+                
             {/each}
         </div>
     

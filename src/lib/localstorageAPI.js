@@ -6,10 +6,15 @@ import { browser } from "$app/environment";
     AntallCookiesTotalt <int>
     CookiesPerSekund <int>
     ActiveItems <Array<string>>
+
+    {
+        item: antall,
+        item2: antall
+    }
 */
 
 export class CookieDataStruct {
-    constructor(Poeng = 0, AntallCookiesTotalt = 0, CookiesPerSekund = 0, ActiveItems = []) {
+    constructor(Poeng = 0, AntallCookiesTotalt = 0, CookiesPerSekund = 0, ActiveItems = {}) {
         this.Poeng = Poeng;
         this.AntallCookiesTotalt = AntallCookiesTotalt;
         this.CookiesPerSekund = CookiesPerSekund;
@@ -65,6 +70,6 @@ export async function resetLagring() {
         return alert("Du slettet ikke dataene");
 
     await removeAllData();
-    alert("Du slettet alle dataene");
     location.reload();
+    alert("Du slettet alle dataene");
 }
