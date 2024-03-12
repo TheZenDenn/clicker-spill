@@ -149,10 +149,10 @@
         <div class="stats grid">
             <h1>Kjeks Clicker</h1>
             <button on:click={() => settings = settings ? false : true}>Settings</button>
-            <p>Cookes per sekund {antallAutoOppgradering}</p>
+            <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
             <h2>Stats</h2>
-            <p>Poeng: {poeng}</p>
-            <p>Antall cookies totalt {antallCookiesTotalt}</p>
+            <p>Poeng: {Math.floor(poeng)}</p>
+            <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
             <button on:click={() => kjøpLootbox()}>Åpne Lootbox (1000 cookies)!</button>
             <button>Spill Memory Card!</button>
             <button>Spill Poker!</button>
@@ -164,7 +164,7 @@
             {#each items as item, i}
                 {#key aktivItems}
                 {#if aktivItems[item.navn]}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris * item.multiplier * aktivItems[item.navn]} cookies</button>
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies</button>
                 {:else}
                 <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies</button>
                 {/if}
