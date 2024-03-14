@@ -164,9 +164,9 @@
             {#each items as item, i}
                 {#key aktivItems}
                 {#if aktivItems[item.navn]}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies</button>
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies - {aktivItems[item.navn]} kjøpt</button>
                 {:else}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies</button>
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies - 0 kjøpt</button>
                 {/if}
                 {/key}
                 
