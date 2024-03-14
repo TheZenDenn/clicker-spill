@@ -147,6 +147,9 @@
         {/key}
 
         <div class="stats grid">
+            {#if poeng < 0}
+<h1 style="color: brown;">Fattig</h1>
+{/if}
             <h1>Kjeks Clicker</h1>
             <button on:click={() => settings = settings ? false : true}>Settings</button>
             <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
@@ -174,6 +177,7 @@
         </div>
     
     </div>
+
 <style>
     @property --x {
     syntax: '<percentage>';
