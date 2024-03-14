@@ -70,6 +70,7 @@
      * @param {number} pris
      * @param {number} addition
      * @param {string} navn
+     * @param {number} multiplier 
      */
     function upgrade(pris, addition, navn, multiplier) {
         if (aktivItems[navn])
