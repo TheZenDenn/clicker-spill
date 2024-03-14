@@ -97,7 +97,7 @@
         console.log(poeng);
     }
 
-    function kjøpLootbox(pris = 1000) {
+    function kjøpLootbox(pris = (poeng/100)*10) {
         if (typeof(pris) != "number") 
             throw "pris trenger å bli gitt i svelte for en eller annen grunn. Dev feil fra deg, ikke meg";
 
@@ -154,7 +154,7 @@
             <h2>Stats</h2>
             <p>Poeng: {Math.floor(poeng)}</p>
             <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
-            <button on:click={() => kjøpLootbox()}>Åpne Lootbox (1000 cookies)!</button>
+            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.floor((poeng/100)*10)} cookies)!</button>
             <button>Spill Memory Card!</button>
             <button>Spill Poker!</button>
             <button>Spill Blackjack!</button>
