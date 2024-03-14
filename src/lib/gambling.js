@@ -21,7 +21,8 @@ export const lootboxOptions = lootboxOptions1.map((a) => a + " %cookies");
 export async function lootBoxResults(vinner, existingCookies) {
     //test 
     let index = lootboxOptions1.indexOf(vinner.replace(" %cookies", ""));
-    let change = Number(lootboxOptions1[index])/100;
-    existingCookies *= change;
+    let prosent = Number(lootboxOptions1[index])/100;
+    let change = existingCookies * prosent;
+    existingCookies += change;
     return existingCookies; //burde ha passet by reference hvis det var mulig
 }
