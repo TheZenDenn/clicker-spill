@@ -70,6 +70,7 @@
      * @param {number} pris
      * @param {number} addition
      * @param {string} navn
+     * @param {number} multiplier 
      */
     function upgrade(pris, addition, navn, multiplier) {
         if (aktivItems[navn])
@@ -156,7 +157,7 @@
             <h2>Stats</h2>
             <p>Poeng: {Math.floor(poeng)}</p>
             <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
-            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.floor((poeng/100)*10)} cookies)!</button>
+            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))} cookies)!</button>
             <button>Spill Memory Card!</button>
             <button>Spill Poker!</button>
             <button>Spill Blackjack!</button>

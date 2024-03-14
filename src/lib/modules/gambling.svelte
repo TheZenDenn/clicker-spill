@@ -5,6 +5,10 @@
     <h1>{tittel}</h1>
     <p>Du kan vinne millioner!</p>
 </div>
+<!--
+    @component
+    ```tittel = "Gambling"```
+-->
 
 <style>
     /*skamløst stjelt fra https://stackoverflow.com/questions/57218443/how-to-animate-a-radial-gradient-using-css*/
