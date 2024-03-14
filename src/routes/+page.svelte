@@ -70,6 +70,7 @@
      * @param {number} pris
      * @param {number} addition
      * @param {string} navn
+     * @param {number} multiplier 
      */
     function upgrade(pris, addition, navn, multiplier) {
         if (aktivItems[navn])
@@ -96,7 +97,7 @@
         console.log(poeng);
     }
 
-    function kjøpLootbox(pris = 1000) {
+    function kjøpLootbox(pris = (poeng/100)*10) {
         if (typeof(pris) != "number") 
             throw "pris trenger å bli gitt i svelte for en eller annen grunn. Dev feil fra deg, ikke meg";
 
@@ -147,13 +148,16 @@
         {/key}
 
         <div class="stats grid">
+            {#if poeng < 0}
+<h1 style="color: brown;">Fattig</h1>
+{/if}
             <h1>Kjeks Clicker</h1>
             <button on:click={() => settings = settings ? false : true}>Settings</button>
             <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
             <h2>Stats</h2>
             <p>Poeng: {Math.floor(poeng)}</p>
             <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
-            <button on:click={() => kjøpLootbox()}>Åpne Lootbox (1000 cookies)!</button>
+            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))} cookies)!</button>
             <button>Spill Memory Card!</button>
             <button>Spill Poker!</button>
             <button>Spill Blackjack!</button>
@@ -164,9 +168,9 @@
             {#each items as item, i}
                 {#key aktivItems}
                 {#if aktivItems[item.navn]}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies</button>
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies - {aktivItems[item.navn]} kjøpt</button>
                 {:else}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies</button>
+                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies - 0 kjøpt</button>
                 {/if}
                 {/key}
                 
@@ -174,6 +178,7 @@
         </div>
     
     </div>
+
 <style>
     @property --x {
     syntax: '<percentage>';
