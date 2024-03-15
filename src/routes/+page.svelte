@@ -149,13 +149,17 @@
 
         <div class="stats grid">
             {#if poeng < 0}
-<h1 style="color: brown;">Fattig</h1>
+<h1 style="color: red;">Fattig</h1>
 {/if}
             <h1>Kjeks Clicker</h1>
             <button on:click={() => settings = settings ? false : true}>Settings</button>
-            <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
+            <p>Cookies per sekund {Math.floor(antallAutoOppgradering)}</p>
             <h2>Stats</h2>
-            <p>Poeng: {Math.floor(poeng)}</p>
+            {#if poeng < 0}
+            <p style="color: red">Poeng: {Math.floor(poeng)}</p>
+            {:else}
+            <p style="color: green">Poeng: {Math.floor(poeng)}</p>
+            {/if}
             <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
             <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))} cookies)!</button>
             <button>Spill Memory Card!</button>
@@ -252,6 +256,7 @@
         width: 100%;
         gap: 0;
     } 
+
     .grid {
         display: inline-grid;
         overflow: scroll;
