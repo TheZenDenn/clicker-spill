@@ -1,5 +1,8 @@
 <script>
+
+ 
     import forside from "$lib/bilder/forside.png";
+
 
     function poeng() {
     let a = Math.floor(Math.random() * 11)
@@ -32,15 +35,28 @@ function VinnEllerTap() {
     @import './style.css';
 </style>
 
-<div class="wrapper">
+<table>
 
-    <li class="card" on:click={VinnEllerTap}>
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <div class="wrapper">
+    
 
-        <div class="img">
-            <img src={forside} alt="">
-        </div>
+        <li class="card" on:click={VinnEllerTap}>
+    
+            <div class="img">
+                <img src={forside} alt="">
+            </div>
+    
+        </li>
+    
+    </div>
+</tr>
 
-    </li>
 
-</div>
+</table>
+
+
 
