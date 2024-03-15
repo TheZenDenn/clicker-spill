@@ -10,8 +10,8 @@ export const lootboxOptions1 = [
     "+10",
     "-33",
 ];
-
-export const lootboxOptions = lootboxOptions1.map((a) => a + " %cookies"); 
+const cookieStr = "% 🍪🍪";
+export const lootboxOptions = lootboxOptions1.map((a) => a + cookieStr); 
 /**
  * Kall denne ved lootbox callback
  * @param {string} vinner vinner-string
@@ -20,7 +20,7 @@ export const lootboxOptions = lootboxOptions1.map((a) => a + " %cookies");
  */
 export async function lootBoxResults(vinner, existingCookies) {
     //test 
-    let index = lootboxOptions1.indexOf(vinner.replace(" %cookies", ""));
+    let index = lootboxOptions1.indexOf(vinner.replace(cookieStr, ""));
     let prosent = Number(lootboxOptions1[index])/100;
     let change = existingCookies * prosent;
     existingCookies += change;

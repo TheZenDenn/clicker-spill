@@ -11,7 +11,7 @@
     /**
      * Disable denne før production.
      */
-    const debug = true;
+    let debug = true;
     let debugPoeng = 0; 
 
     let antallFysiskeKlikk = 0;
@@ -119,8 +119,8 @@
 </script>
     {#if settings}
         <div class="settings">
-            test
-            <button on:click={() => settings = settings ? false : true}>Settings</button>
+            <button on:click={() => debug = debug ? false : true}>Toggle debug mode</button>
+            <button on:click={() => settings = settings ? false : true}>Lukk instillinger</button>
             <button on:click={localstorageAPI.resetLagring}>Reset lagring</button>
         </div>
     {/if}
@@ -129,7 +129,7 @@
         Set poeng: <input type="number" bind:value={debugPoeng}> <button on:click={() => poeng = debugPoeng}>Set poeng</button>
     {/if}
     {#if error} 
-        <p>Ikke nok cookies!</p>
+        <p>Ikke nok cookies! Du er fattig</p>
     {/if}
     <div class="minigames">
         {#if lootboxVis}
@@ -149,14 +149,14 @@
 
         <div class="stats grid">
             {#if poeng < 0}
-<h1 style="color: brown;">Fattig</h1>
-{/if}
-            <h1>Kjeks Clicker</h1>
+        <h1 style="color: brown;">Fattig</h1>
+        {/if}
+            <h1>Kjeks Klikker</h1>
             <button on:click={() => settings = settings ? false : true}>Settings</button>
-            <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
+            <p>Kjeks per sekund {Math.floor(antallAutoOppgradering)}🍪</p>
             <h2>Stats</h2>
-            <p>Poeng: {Math.floor(poeng)}</p>
-            <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
+            <p>Poeng: {Math.floor(poeng)}🍪</p>
+            <p>Antall kjeks totalt {Math.floor(antallCookiesTotalt)}🍪</p>
             <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))} cookies)!</button>
             <button>Spill Memory Card!</button>
             <button>Spill Poker!</button>
@@ -164,14 +164,14 @@
             <button>Spill Slots!</button>
         </div>
 
-        <div class="shop grid">
+        <div class="shop grid" style="var(--image, {kjeks})">
             {#each items as item, i}
                 {#key aktivItems}
-                {#if aktivItems[item.navn]}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies - {aktivItems[item.navn]} kjøpt</button>
-                {:else}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies - 0 kjøpt</button>
-                {/if}
+                    {#if aktivItems[item.navn]}
+                    <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])}🍪 - {aktivItems[item.navn]} kjøpt</button>
+                    {:else}
+                    <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris}🍪 - 0 kjøpt</button>
+                    {/if}
                 {/key}
                 
             {/each}
@@ -180,6 +180,16 @@
     </div>
 
 <style>
+    :global(body) {
+        font-family: sans-serif;
+    }
+
+    :global(button) {
+        font-family: sans-serif;
+        font-weight: bolder !important;
+        background: none;
+    }
+
     @property --x {
     syntax: '<percentage>';
     inherits: false;
@@ -258,6 +268,11 @@
     }
 
     .shop button {
+        height: 70px;
+        gap: 0;
+    }
+
+    .stats button {
         height: 50px;
         gap: 0;
     }

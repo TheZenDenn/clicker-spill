@@ -27,6 +27,10 @@
         return _kort;
     }
 
+    function giKort(spiller = {}) {
+        spiller.kort = [...dealKort()];
+    }
+
     function runde(spillere, kortIRunden) {
         
     }

@@ -45,7 +45,9 @@
         aktiv.unshift(aktiv.pop());
         aktiv = aktiv;
     }
+    let won = false;
     async function openLootbox() {
+        let won = false;
         await sleep(1000);
         //bestem en vinner
         let vinner = finnRandom(items);
@@ -68,7 +70,7 @@
             await sleep(sleepTime)
         } 
         winner = vinner[0];
-
+        won = true;
         callback();
         await sleep(2000);
         if (resetKnappVis)
@@ -77,6 +79,11 @@
     }
     let knappVis = false; //legacy 
     openLootbox();
+
+    let cookies = [];
+    for (let i = 0; i < 10; i++) {
+        cookies.push("🍪");
+    }
 </script>
 <!--
     @component
@@ -97,6 +104,18 @@
 -->
 
 <div class="altlootbox" in:slide out:slide>
+    {#if winner}
+    <div class="" >
+        {#each cookies as cookie, i}
+            {#if cookies.length < i}
+            <div class="coo left cookierain" style="margin-left: {(Math.random() * 90)}vw">{cookie}</div>
+            {:else}
+            <div class="right cookierain" style="margin-left: {(Math.random() * 90)}vw">{cookie}</div>
+            {/if}
+            
+        {/each}
+    </div>
+    {/if}
 
     <div class="lootbox">
         <Gambling tittel="Lootbox"/>
@@ -125,6 +144,55 @@
 
 </div>
 <style>
+    @keyframes cookierain {
+        0% {
+            display: block;
+            top: 100vh;
+        }
+
+        40% {
+            top: -20vh;
+        }
+
+        100% {
+            top: 100vh;
+            display: none;
+        }
+    }
+
+    @keyframes left {
+        0% {
+            left: 0;
+        }
+        100% {
+            left: 100vw;
+        }
+    }
+    @keyframes left {
+        0% {
+            left: 100vw;
+        }
+        100% {
+            left: 0vw;
+        }
+    }
+
+
+    .left {
+        position: absolute;
+        animation: left 3s;
+    }
+    .right {
+        position: absolute;
+        animation: right 3s;
+    }
+    .cookierain {
+        top: 200vh;
+        font-size: 5em;
+        position: absolute;
+        animation: cookierain 3s;
+    }
+
     @keyframes update {
         0% {
             transform: scale(0.85);
@@ -143,6 +211,8 @@
 
     .knapp {
         text-align: center;
+        font-family: sans-serif;
+        font-weight: bold;
     }
     .lootbox {
         text-align: center;
@@ -152,12 +222,13 @@
     
     .item {
         display: inline-block;
-        padding: 1em;
-        margin: 1em;
+        padding: 2em;
+        margin: 1.5em;
         margin-bottom: 10em;
         border: 2px solid teal;
         width: 5em;
-        
+        font-weight: bolder;
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
 
     .ani {
@@ -168,7 +239,6 @@
         background: linear-gradient(gold, gold) no-repeat center/2px 100%;
         background-color: green;
         border: 3px solid gold;
-        padding: 1.8em;
+        padding: 2.5em;
     }
-
 </style>
