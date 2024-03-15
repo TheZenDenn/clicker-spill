@@ -107,10 +107,10 @@
     {#if winner}
     <div class="" >
         {#each cookies as cookie, i}
-            {#if cookies.length < i}
-            <div class="coo left cookierain" style="margin-left: {(Math.random() * 90)}vw">{cookie}</div>
+            {#if (cookies.length / 2) < i}
+            <div class="cookierain" style="margin-left: {(Math.random() * 80)}vw">{cookie}</div>
             {:else}
-            <div class="right cookierain" style="margin-left: {(Math.random() * 90)}vw">{cookie}</div>
+            <div class="cookierain1" style="margin-right: {(Math.random() * 80)}vw">{cookie}</div>
             {/if}
             
         {/each}
@@ -149,48 +149,49 @@
             display: block;
             top: 100vh;
         }
-
-        40% {
-            top: -20vh;
+        50% {
+            top: -40vh;
         }
-
         100% {
             top: 100vh;
             display: none;
         }
     }
+    :root {
+        --max: 40vw;
+        --min: 0vw;
+    }
+    @keyframes right {
+        0% {
+            left: var(--min); 
+        }
+
+        100% {
+            left: var(--max);
+        }
+    }
 
     @keyframes left {
         0% {
-            left: 0;
+            right: var(--min);
         }
-        100% {
-            left: 100vw;
-        }
-    }
-    @keyframes left {
-        0% {
-            left: 100vw;
-        }
-        100% {
-            left: 0vw;
-        }
-    }
 
-
-    .left {
-        position: absolute;
-        animation: left 3s;
-    }
-    .right {
-        position: absolute;
-        animation: right 3s;
+        100% {
+            right: var(--max);
+        }
     }
     .cookierain {
         top: 200vh;
         font-size: 5em;
         position: absolute;
-        animation: cookierain 3s;
+        animation: cookierain 3s, right 3s;
+    }
+
+    .cookierain1 {
+        top: 200vh;
+        font-size: 5em;
+        position: absolute;
+        animation: cookierain 3s, left 3s;
     }
 
     @keyframes update {
