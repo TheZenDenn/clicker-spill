@@ -14,9 +14,9 @@ export const items = [
     new menyitem(130000, 1000, "Father of cookies"),
     new menyitem(1400000, 10000, "Bror of cookies"),
     new menyitem(15000000, 100000, "Pastor of cookies"),
-    new menyitem(10000, 15, "Sogneprest of cookies"),
-    new menyitem(50000, 30, "Konge av Cookies"),
-    new menyitem(100000, 50, "Brosjan Jesus"),
-    new menyitem(1000000, 1000, "Brosjan Jehova"),
+    new menyitem(160000000, 1000000, "Sogneprest of cookies"),
+    new menyitem(1700000000, 10000000, "Konge av Cookies"),
+    new menyitem(18000000000, 100000000, "Brosjan Jesus"),
+    new menyitem(190000000000, 1000000000, "Brosjan Jehova"),
 
 ]
