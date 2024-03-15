@@ -153,7 +153,7 @@
         {/if}
             <h1>Kjeks Klikker</h1>
             <button on:click={() => settings = settings ? false : true}>Settings</button>
-            <p>Kjeks per sekund {Math.floor(antallAutoOppgradering)}🍪</p>
+            <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
             <h2>Stats</h2>
             <p>Poeng: {Math.floor(poeng)}🍪</p>
             <p>Antall kjeks totalt {Math.floor(antallCookiesTotalt)}🍪</p>
@@ -262,6 +262,7 @@
         width: 100%;
         gap: 0;
     } 
+
     .grid {
         display: inline-grid;
         overflow: scroll;
