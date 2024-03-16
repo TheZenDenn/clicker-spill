@@ -2,6 +2,7 @@
     import forside from "$lib/bilder/forside.png";
     import {sleep} from "$lib/index";
     import Cookierain from "$lib/modules/cookierain.svelte"
+    import {slide} from "svelte/transition"
 
     export let kjeks = undefined;
     let visKjeks = false;
@@ -36,7 +37,7 @@
     Burde egentlig få pakken til å bli pakket opp, for å så eksplodere
     Deretter vis poengene
 -->
-<div class="all">
+<div class="all" transition:slide>
 <table>
     <tr>
         <td>
