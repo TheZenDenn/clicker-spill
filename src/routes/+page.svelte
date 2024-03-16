@@ -5,6 +5,7 @@
     import Lootbox from "$lib/modules/lootbox.svelte" 
     import * as gambling from "$lib/gambling";
     import {sleep} from "$lib/index";
+    import Resize from "$lib/modules/resize.svelte"
 
     let settings = false;
 
@@ -18,6 +19,7 @@
     let antallCookiesTotalt = 0;
     let poeng = 0;
     let antallAutoOppgradering = 1;
+    let kjøpteLootbox = 0;
     /**
      * @type {Object}
      */
@@ -38,7 +40,7 @@
         poeng = data.Poeng
         antallAutoOppgradering = data.CookiesPerSekund
         aktivItems = data.ActiveItems
-        console.log(data)
+        kjøpteLootbox = data.KjøpteLootbox;
     }
     getSave();
     
@@ -56,9 +58,8 @@
     let timeForAutosave = 10 * 1000;
     const autoSave = setInterval(async () => {
         //finn alle dataene 
-        let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems);
+        let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems, kjøpteLootbox);
         await localstorageAPI.writeData({...datastruct})
-        console.log("Wrote data")
     }, timeForAutosave);
 
     //Automatisk få kjeks hvert sekund
@@ -92,9 +93,7 @@
      */
     let winner;
     const lootboxCB = async () => {
-        console.log(poeng);
         poeng = await gambling.lootBoxResults(winner, poeng);
-        console.log(poeng);
     }
 
     function kjøpLootbox(pris = (poeng/100)*10) {
@@ -104,7 +103,7 @@
         if (poeng < pris) 
             return errorFunds();
 
-        
+        kjøpteLootbox += 1;
         poeng -= pris;
         console.log(poeng, pris);
         lootboxVis = true;
@@ -117,6 +116,7 @@
     }
 
 </script>
+    <Resize width={830} />
     {#if settings}
         <div class="settings">
             <button on:click={() => debug = debug ? false : true}>Toggle debug mode</button>
@@ -152,11 +152,17 @@
         <h1 style="color: brown;">Fattig</h1>
         {/if}
             <h1>Kjeks Klikker</h1>
-            <button on:click={() => settings = settings ? false : true}>Settings</button>
+            <button on:click={() => settings = settings ? false : true}>Instillinger</button>
             <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
-            <h2>Stats</h2>
-            <p>Poeng: {Math.floor(poeng)}🍪</p>
-            <p>Antall kjeks totalt {Math.floor(antallCookiesTotalt)}🍪</p>
+            <details open>
+                <summary><b>Statistikk<b/></summary>
+                <!-- lagre all relevant statestikk -->
+                <p>Poeng: {Math.floor(poeng)}🍪</p>
+                <p>Antall kjeks totalt: {Math.floor(antallCookiesTotalt)}🍪</p>
+                <p>Antall kjøpte lootboxer: {kjøpteLootbox}</p>
+            </details>
+            
+            
             <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))} cookies)!</button>
             <button>Spill Memory Card!</button>
             <button>Spill Poker!</button>

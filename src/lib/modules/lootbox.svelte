@@ -1,6 +1,8 @@
 <script>
     import {fade, slide, fly} from "svelte/transition";
     import Gambling from "$lib/modules/gambling.svelte"
+    import Resize from "$lib/modules/resize.svelte"
+    
     export let items = [ /* burde kunne ha så mange som man har lyst til */ 
         "item1",
         "item2",
@@ -10,7 +12,7 @@
         "seks"
     ];
     export let winner = undefined;
-    export let callback = () =>  {alert("Du vant " + winner)};
+    export let callback = () =>  {console.log("Du vant " + winner)};
     /**
      * Dette er en test
      * @param items
@@ -105,7 +107,7 @@
 
 <div class="altlootbox" in:slide out:slide>
     {#if winner}
-    <div class="" >
+    <div>
         {#each cookies as cookie, i}
             {#if (cookies.length / 2) < i}
             <div class="cookierain" style="margin-left: {(Math.random() * 80)}vw">{cookie}</div>
@@ -119,6 +121,7 @@
 
     <div class="lootbox">
         <Gambling tittel="Lootbox"/>
+        <Resize width={1090}/>
         <div class="fade" transition:fade={{duration: 400}}>
             {#key aktiv}
             {#each aktiv as item, i}

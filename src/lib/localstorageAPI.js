@@ -14,11 +14,12 @@ import { browser } from "$app/environment";
 */
 
 export class CookieDataStruct {
-    constructor(Poeng = 0, AntallCookiesTotalt = 0, CookiesPerSekund = 0, ActiveItems = {}) {
+    constructor(Poeng = 0, AntallCookiesTotalt = 0, CookiesPerSekund = 0, ActiveItems = {}, KjøpteLootbox = 0) {
         this.Poeng = Poeng;
         this.AntallCookiesTotalt = AntallCookiesTotalt;
         this.CookiesPerSekund = CookiesPerSekund;
         this.ActiveItems = ActiveItems;
+        this.KjøpteLootbox = KjøpteLootbox
     }
 }
 /**
