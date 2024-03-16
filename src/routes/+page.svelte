@@ -6,6 +6,7 @@
     import * as gambling from "$lib/gambling";
     import {sleep} from "$lib/index";
     import Resize from "$lib/modules/resize.svelte"
+    import Luckybox from "$lib/modules/luckybox.svelte";
 
     let settings = false;
 
@@ -35,12 +36,8 @@
         if (!data)
             return; //defaults
 
-        //antallFysiskeKlikk = 
-        antallCookiesTotalt = data.AntallCookiesTotalt
-        poeng = data.Poeng
-        antallAutoOppgradering = data.CookiesPerSekund
-        aktivItems = data.ActiveItems
-        kjøpteLootbox = data.KjøpteLootbox;
+        // @ts-ignore bc fuck readability 
+        antallCookiesTotalt = data.AntallCookiesTotalt; poeng = data.Poeng; antallAutoOppgradering = data.CookiesPerSekund;aktivItems = data.ActiveItems; kjøpteLootbox = data.KjøpteLootbox;
     }
     getSave();
     
@@ -115,6 +112,30 @@
         error = false;
     }
 
+    let luckyboxVis = false;
+    let luckyboxPoeng = undefined;
+    let visLuckyboxSpillIgjen = false;
+    function kjøpLuckybox() {
+        visLuckyboxSpillIgjen = false;
+        let pris = 2000//(poeng / 100) * 10;
+        if (poeng < pris)
+            return errorFunds();
+
+        poeng -= pris;
+        luckyboxPoeng = undefined;
+        luckyboxVis = true;
+    }
+    async function luckyboxCallback() {
+        console.log(1);
+        await sleep(2000);
+        visLuckyboxSpillIgjen = true;
+        //luckyboxVis = false;
+        //endre poeng 
+        console.log(luckyboxPoeng);
+        poeng += luckyboxPoeng;
+        //luckyboxPoeng = undefined;
+    }
+
 </script>
     <Resize width={830} />
     {#if settings}
@@ -138,6 +159,15 @@
             <button class="gamblingknapp" on:click={() => {lootboxVis = false; winner = undefined;}}>Lukk lootbox</button>
             <button id="spilligjen" class="gamblingknapp" on:click={async () => {lootboxVis = false; winner = undefined; await sleep(500); kjøpLootbox();}}>Spill igjen!</button>
             {/if}
+        {:else if luckyboxVis}
+            <Luckybox callback={luckyboxCallback} bind:kjeks={luckyboxPoeng}/>
+            hei? 
+            {#if visLuckyboxSpillIgjen}
+                <div class="bro" style="position: absolute">
+                    <button class="gamblingknapp" on:click={() => {luckyboxVis = false; luckyboxPoeng = undefined;}}>Lukk Luckybox</button>
+                    <button id="spilligjen" class="gamblingknapp" on:click={async () => {luckyboxVis = false; luckyboxPoeng = undefined; await sleep(500); kjøpLuckybox();}}>Spill igjen</button>
+                </div>
+            {/if}
         {/if}
     </div>
 
@@ -148,8 +178,8 @@
         {/key}
 
         <div class="stats grid">
-            {#if poeng < 0}
-        <h1 style="color: brown;">Fattig</h1>
+        {#if poeng < 0}
+            <h1 style="color: brown;">Fattig</h1>
         {/if}
             <h1>Kjeks Klikker</h1>
             <button on:click={() => settings = settings ? false : true}>Instillinger</button>
@@ -163,8 +193,8 @@
             </details>
             
             
-            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))} cookies)!</button>
-            <button>Spill Memory Card!</button>
+            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))}🍪)!</button>
+            <button on:click={kjøpLuckybox}>Spill Luckybox! (2000🍪)</button>
             <button>Spill Poker!</button>
             <button>Spill Blackjack!</button>
             <button>Spill Slots!</button>
@@ -186,6 +216,14 @@
     </div>
 
 <style>
+    .bro {
+        text-align: center;
+        position: absolute;
+        top: 0;
+        z-index: 9999;
+        width: 100%;
+    }
+
     :global(body) {
         font-family: sans-serif;
     }

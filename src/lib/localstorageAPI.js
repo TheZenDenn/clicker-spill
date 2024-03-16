@@ -24,7 +24,7 @@ export class CookieDataStruct {
 }
 /**
  * Gets all data. No params required
- * @returns JS-object of all data
+ * @returns {Object} JS-object of all data
  */
 export async function getData() {
     //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
@@ -34,8 +34,8 @@ export async function getData() {
     // @ts-ignore
     let org = localStorage.getItem("info");
     // @ts-ignore
-    org = JSON.parse(org);
-    return org;
+    let orgObj = JSON.parse(org);
+    return orgObj;
 }
 /**
  * Usage: ```writeData({...new CookieDataStruct})```

@@ -2,6 +2,7 @@
     import {fade, slide, fly} from "svelte/transition";
     import Gambling from "$lib/modules/gambling.svelte"
     import Resize from "$lib/modules/resize.svelte"
+    import Cookierain from "$lib/modules/cookierain.svelte"
     
     export let items = [ /* burde kunne ha så mange som man har lyst til */ 
         "item1",
@@ -81,11 +82,6 @@
     }
     let knappVis = false; //legacy 
     openLootbox();
-
-    let cookies = [];
-    for (let i = 0; i < 10; i++) {
-        cookies.push("🍪");
-    }
 </script>
 <!--
     @component
@@ -107,16 +103,7 @@
 
 <div class="altlootbox" in:slide out:slide>
     {#if winner}
-    <div>
-        {#each cookies as cookie, i}
-            {#if (cookies.length / 2) < i}
-            <div class="cookierain" style="margin-left: {(Math.random() * 80)}vw">{cookie}</div>
-            {:else}
-            <div class="cookierain1" style="margin-right: {(Math.random() * 80)}vw">{cookie}</div>
-            {/if}
-            
-        {/each}
-    </div>
+        <Cookierain />
     {/if}
 
     <div class="lootbox">
@@ -147,56 +134,10 @@
 
 </div>
 <style>
-    @keyframes cookierain {
-        0% {
-            display: block;
-            top: 100vh;
-        }
-        50% {
-            top: -40vh;
-        }
-        100% {
-            top: 100vh;
-            display: none;
-        }
-    }
     :root {
         --max: 40vw;
         --min: 0vw;
     }
-    @keyframes right {
-        0% {
-            left: var(--min); 
-        }
-
-        100% {
-            left: var(--max);
-        }
-    }
-
-    @keyframes left {
-        0% {
-            right: var(--min);
-        }
-
-        100% {
-            right: var(--max);
-        }
-    }
-    .cookierain {
-        top: 200vh;
-        font-size: 5em;
-        position: absolute;
-        animation: cookierain 3s, right 3s;
-    }
-
-    .cookierain1 {
-        top: 200vh;
-        font-size: 5em;
-        position: absolute;
-        animation: cookierain 3s, left 3s;
-    }
-
     @keyframes update {
         0% {
             transform: scale(0.85);
