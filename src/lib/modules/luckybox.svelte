@@ -16,7 +16,7 @@
         if (kjeks != undefined)
             return;
         visKjeks = false;
-        let rand = Math.random();
+        let rand = Math.random(1, 100);
         if (rand < 0.5)
             kjeks = fåPoeng();
         else    
