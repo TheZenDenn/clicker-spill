@@ -1,11 +1,14 @@
 <script>
   import {sleep} from "$lib/index";
+  import Cookierain from "$lib/modules/cookierain.svelte";
   export let vinner = undefined;
   export let callback = () => {console.log('Du vant ' + vinner)}
   let number = ['---'];
   let info = 'Trykk pull for å starte';
   let spill = true;
+  let won = false;
   async function click() {
+      won = false;
       for (let i = 0; i < 20; i++) {
         number[0] = Math.round(Math.random() * 100);
         number[1] = Math.round(Math.random() * 100);
@@ -28,6 +31,7 @@
 
       
       callback()
+      won = true;
       console.log(d)
   }
 
@@ -43,6 +47,9 @@
 <h1>Slotmachine</h1>
 <hr id=hr>
 <div class=container>
+  {#if won}
+    <Cookierain />
+  {/if}
   <div class=content>
   {info}
   </div>

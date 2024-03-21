@@ -1,6 +1,7 @@
 <script>
     let cookies = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 7; i++) {
+        cookies.push("🎉")
         cookies.push("🍪");
     }
 </script>
