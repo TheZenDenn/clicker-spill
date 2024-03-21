@@ -7,6 +7,7 @@
     import {sleep} from "$lib/index";
     import Resize from "$lib/modules/resize.svelte"
     import Luckybox from "$lib/modules/luckybox.svelte";
+    import Slots from "$lib/modules/slots.svelte";
 
     let settings = false;
 
@@ -149,6 +150,31 @@
         //luckyboxPoeng = undefined;
     }
 
+    let visSlots = false;
+    let slotsPris = 1000;
+    let visSlotsSpillIgjenKnapp = false;
+    /**
+     * @type {number|undefined}
+     */
+    let vinnerSlots = undefined;
+    function slotsKjøp() {
+        visSlots = false;
+        if (slotsPris > poeng)
+            return errorFunds()
+
+        poeng -= slotsPris
+        vinnerSlots = undefined;
+        visSlots = true;
+
+    }
+    
+    async function slotsCB() {
+        await sleep(2000);
+        poeng += vinnerSlots
+        visSlotsSpillIgjenKnapp = true;
+
+    }
+
 </script>
     <Resize width={830} />
     {#if settings}
@@ -174,13 +200,21 @@
             {/if}
         {:else if luckyboxVis}
             <Luckybox callback={luckyboxCallback} bind:kjeks={luckyboxPoeng}/>
-            hei? 
             {#if visLuckyboxSpillIgjen}
                 <div class="bro" style="position: absolute">
                     <button class="gamblingknapp" on:click={() => {luckyboxVis = false; luckyboxPoeng = undefined;}}>Lukk Luckybox</button>
                     <button id="spilligjen" class="gamblingknapp" on:click={async () => {luckyboxVis = false; luckyboxPoeng = undefined; await sleep(500); kjøpLuckybox();}}>Spill igjen</button>
                 </div>
             {/if}
+        {:else if visSlots}
+                <Slots bind:vinner={vinnerSlots} callback={slotsCB}/>
+                {#if visSlotsSpillIgjenKnapp}
+                    <div class="bro">
+                        <button class="gamblingknapp" on:click={() => {visSlots = false; vinnerSlots = undefined;}}>Lukk Slots</button>
+                        <button id="spilligjen" class="gamblingknapp" on:click={async () => {visSlots = false; vinnerSlots = undefined; await sleep(500); slotsKjøp();}}>Spill igjen</button>
+                    
+                    </div>
+                {/if}
         {/if}
     </div>
 
@@ -208,6 +242,8 @@
             
             <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))}🍪)!</button>
             <button on:click={kjøpLuckybox}>Spill Luckybox! (2000🍪)</button>
+            <button on:click={slotsKjøp}>Spill Slots! (1000🍪)</button>
+        
         </div>
 
         <div class="shop grid" style="var(--image, {kjeks})">
