@@ -9,6 +9,7 @@
   let won = false;
   async function click() {
       won = false;
+      spill = false;
       for (let i = 0; i < 20; i++) {
         number[0] = Math.round(Math.random() * 100);
         number[1] = Math.round(Math.random() * 100);
@@ -16,7 +17,6 @@
         await sleep(100);
       }
 
-      spill = false;
       let a = number[0] = Math.round(Math.random()*8+1);
       let b = number[1] = Math.round(Math.random()*8+1);
       let c = number[2] = Math.round(Math.random()*8+1);
@@ -28,47 +28,47 @@
         info = 'Du taper!';
         vinner *= -1;
       }
-
       
       callback()
       won = true;
       console.log(d)
   }
-
 </script>
 <!--
   @component
-  `vinner = undefined`
-  `callback`
+  ### Bruk bind
+  `vinner = undefined` 
+
+  ### Ikke bruk bind
+  `callback` gjør ting på hovedsiden
 -->
 <body>
-<br>
-<hr id=hr>
-<h1>Slotmachine</h1>
-<hr id=hr>
-<div class=container>
-  {#if won}
-    <Cookierain />
-  {/if}
-  <div class=content>
-  {info}
-  </div>
-  <div id=reels>
-  {#each number as n}
-    {n}
-  {/each}
-  </div>
   <br>
-  <hr>
-  <br>
-  <div class=button>
-    {#if spill}
-      <button on:click={click}>Pull</button>
+  <hr id=hr>
+  <h1>Slotmachine</h1>
+  <hr id=hr>
+  <div class=container>
+    {#if won}
+      <Cookierain />
     {/if}
-  
+    <div class=content>
+    {info}
+    </div>
+    <div id=reels>
+    {#each number as n}
+      {n}
+    {/each}
+    </div>
+    <br>
+    <hr>
+    <br>
+    <div class=button>
+      {#if spill}
+        <button on:click={click}>Pull</button>
+      {/if} 
+    </div>
   </div>
-</div>
-</body>
+  </body>
 <style>
   body {
     margin-top: 5%;

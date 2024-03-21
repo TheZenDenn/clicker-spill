@@ -5,16 +5,15 @@
     import Lootbox from "$lib/modules/lootbox.svelte" 
     import * as gambling from "$lib/gambling";
     import {sleep} from "$lib/index";
-    import Resize from "$lib/modules/resize.svelte"
     import Luckybox from "$lib/modules/luckybox.svelte";
     import Slots from "$lib/modules/slots.svelte";
 
     let settings = false;
-
     /**
      * Disable denne før production.
+     * Kan skrus på i settings
      */
-    let debug = true;
+    let debug = false;
     let debugPoeng = 0; 
 
     let antallFysiskeKlikk = 0;
@@ -46,7 +45,7 @@
 
     //få lagrede data først - hvis ikke default
     async function getSave() {
-        let data = await localstorageAPI.getData();
+        let data = await localstorageAPI.getData(); //tror ikke man trenger await her, men whatever
         if (!data)
             return;
         // @ts-ignore bc fuck readability 
@@ -58,7 +57,6 @@
     function faaPoeng(){
         poeng += antallAutoOppgradering
         antallCookiesTotalt += antallAutoOppgradering;
-
         if (poeng > antallCookiesTotalt) { //gambling hotfix
             let diff = poeng - antallCookiesTotalt;
             antallCookiesTotalt += diff;
@@ -69,7 +67,6 @@
         //finn alle dataene 
         let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems, kjøpteLootbox);
         await localstorageAPI.writeData({...datastruct})
-        //console.log("saved")
     }, timeForAutosave);
 
     //Automatisk få kjeks hvert sekund
@@ -142,13 +139,11 @@
         console.log(1);
         await sleep(2000);
         visLuckyboxSpillIgjen = true;
-        //luckyboxVis = false;
         //endre poeng 
         console.log(luckyboxPoeng);
         poeng += luckyboxPoeng;
         //Sigma fix 
         kjøpteLootbox += 1
-        //luckyboxPoeng = undefined;
     }
 
     let visSlots = false;
@@ -165,7 +160,6 @@
             return errorFunds()
 
         poeng -= slotsPris
-        //vinnerSlots = undefined;
         visSlots = true;
         visLuckyboxSpillIgjen = false;
         console.log(visLuckyboxSpillIgjen)
@@ -173,14 +167,11 @@
     
     async function slotsCB() {
         await sleep(2000);
-        console.log(vinnerSlots);
         poeng += vinnerSlots;
         visSlotsSpillIgjenKnapp = true;
-        console.log(visLuckyboxSpillIgjen);
     }
 
 </script>
-    <Resize width={830} />
     {#if settings}
         <div class="settings">
             <button on:click={() => debug = debug ? false : true}>Toggle debug mode</button>
@@ -216,7 +207,6 @@
                     <div class="bro">
                         <button class="gamblingknapp" on:click={() => {visSlots = false;}}>Lukk Slots</button>
                         <button id="spilligjen" class="gamblingknapp" on:click={async () => {visSlots = false;await sleep(500); slotsKjøp();}}>Spill igjen</button>
-                    
                     </div>
                 {/if}
         {/if}
@@ -224,8 +214,7 @@
 
     <div class="master">
         {#key antallFysiskeKlikk} <!-- animasjon ting -->
-        <div class="kjeks"><h1 on:click={() => {faaPoeng(); antallFysiskeKlikk = antallFysiskeKlikk + 1;}}><img src="{kjeks}" alt=""></h1></div>
-    
+            <div class="kjeks"><h1 on:click={() => {faaPoeng(); antallFysiskeKlikk = antallFysiskeKlikk + 1;}}><img src="{kjeks}" alt=""></h1></div>
         {/key}
 
         <div class="stats grid">
@@ -242,12 +231,9 @@
                 <p>Antall kjeks totalt: {Math.floor(antallCookiesTotalt)}🍪</p>
                 <p>Antall kjøpte lootboxer: {kjøpteLootbox}</p>
             </details>
-            
-            
             <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))}🍪)!</button>
             <button on:click={kjøpLuckybox}>Spill Luckybox! (2000🍪)</button>
             <button on:click={slotsKjøp}>Spill Slots! (1000🍪)</button>
-        
         </div>
 
         <div class="shop grid" style="var(--image, {kjeks})">
@@ -263,7 +249,6 @@
                 {/if}
             {/each}
         </div>
-    
     </div>
 
 <style>

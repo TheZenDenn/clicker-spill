@@ -1,3 +1,8 @@
+<script>
+    import Resize from "$lib/modules/resize.svelte";
+</script>
+<!-- ikke for å hindre brukeren, men for å fortelle dem at de gjør noe dumt -->
+<Resize width={830} />
 <slot></slot>
 
 <style>
