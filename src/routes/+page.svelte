@@ -155,7 +155,7 @@
     let slotsPris = 1000;
     let visSlotsSpillIgjenKnapp = false;
     /**
-     * @type {number|undefined}
+     * @type {number}
      */
     let vinnerSlots = 0;
     function slotsKjøp() {

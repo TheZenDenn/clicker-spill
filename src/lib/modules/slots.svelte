@@ -1,10 +1,18 @@
 <script>
+  import {sleep} from "$lib/index";
   export let vinner = undefined;
   export let callback = () => {console.log('Du vant ' + vinner)}
   let number = ['---'];
   let info = 'Trykk pull for å starte';
   let spill = true;
-  function click() {
+  async function click() {
+      for (let i = 0; i < 20; i++) {
+        number[0] = Math.round(Math.random() * 100);
+        number[1] = Math.round(Math.random() * 100);
+        number[2] = Math.round(Math.random() * 100);
+        await sleep(100);
+      }
+
       spill = false;
       let a = number[0] = Math.round(Math.random()*8+1);
       let b = number[1] = Math.round(Math.random()*8+1);
