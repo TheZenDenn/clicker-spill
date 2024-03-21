@@ -7,14 +7,16 @@
       let a = number[0] = Math.round(Math.random()*8+1);
       let b = number[1] = Math.round(Math.random()*8+1);
       let c = number[2] = Math.round(Math.random()*8+1);
+      let d = String(a) + String(b) + String(c)
+      vinner = Number(d)
       if (number[0] == number[1] && number[0] == number[2]) {
         info = 'Du vinner!';
       } else {
         info = 'Du taper!';
+        vinner *= -1;
       }
 
-      let d = String(a) + String(b) + String(c)
-      vinner = Number(d)
+      
       callback()
       console.log(d)
   }
