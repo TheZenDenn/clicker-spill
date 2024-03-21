@@ -39,6 +39,7 @@
         antallAutoOppgradering = 1;
         kjøpteLootbox = 0;
         timeForAutosave = 100000;
+        aktivItems = {};
         await sleep(3600);
         timeForAutosave = 1000;
     }
@@ -257,8 +258,6 @@
                         {/if}
                     {/key}
                 {/if}
-                
-                
             {/each}
         </div>
     
