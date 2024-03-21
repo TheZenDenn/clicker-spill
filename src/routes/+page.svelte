@@ -234,7 +234,7 @@
         {/if}
             <h1>Kjeks Klikker</h1>
             <button on:click={() => settings = settings ? false : true}>Instillinger</button>
-            <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
+            <p>Cookies per sekund {Math.floor(antallAutoOppgradering)}</p>
             <details open>
                 <summary><b>Statistikk<b/></summary>
                 <!-- lagre all relevant statestikk -->
