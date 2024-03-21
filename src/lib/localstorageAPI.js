@@ -1,4 +1,5 @@
 import { browser } from "$app/environment";
+import { sleep } from "$lib/index";
 
 /*
     Datalagringsstruktur burde være slik:
@@ -14,27 +15,28 @@ import { browser } from "$app/environment";
 */
 
 export class CookieDataStruct {
-    constructor(Poeng = 0, AntallCookiesTotalt = 0, CookiesPerSekund = 0, ActiveItems = {}) {
+    constructor(Poeng = 0, AntallCookiesTotalt = 0, CookiesPerSekund = 0, ActiveItems = {}, KjøpteLootbox = 0) {
         this.Poeng = Poeng;
         this.AntallCookiesTotalt = AntallCookiesTotalt;
         this.CookiesPerSekund = CookiesPerSekund;
         this.ActiveItems = ActiveItems;
+        this.KjøpteLootbox = KjøpteLootbox
     }
 }
 /**
  * Gets all data. No params required
- * @returns JS-object of all data
+ * @returns {Promise<Object>} JS-object of all data
  */
 export async function getData() {
     //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
     if (!browser)
-        return;
+        return {};
 
     // @ts-ignore
     let org = localStorage.getItem("info");
     // @ts-ignore
-    org = JSON.parse(org);
-    return org;
+    let orgObj = JSON.parse(org);
+    return orgObj;
 }
 /**
  * Usage: ```writeData({...new CookieDataStruct})```
@@ -69,7 +71,20 @@ export async function resetLagring() {
     if (!confirm("Ønsker du å slette alle dataene"))
         return alert("Du slettet ikke dataene");
 
-    await removeAllData();
+    //siden det ikke sletter alle dataene alltid lager jeg denne 
+    let data = await getData();
+    while (data) {
+        await removeAllData();
+        data = await getData();
+        //dette burde løse problemene???
+        //idk - https://www.youtube.com/watch?v=cCNiUlFE4sI
+        console.log(data)
+    }
+    console.log("deleted")
+     
+    await sleep(500);
+    data = await getData();
+    console.log(data)
     location.reload();
     alert("Du slettet alle dataene");
 }

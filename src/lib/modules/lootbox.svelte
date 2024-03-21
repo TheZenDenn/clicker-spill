@@ -1,6 +1,9 @@
 <script>
     import {fade, slide, fly} from "svelte/transition";
     import Gambling from "$lib/modules/gambling.svelte"
+    import Resize from "$lib/modules/resize.svelte"
+    import Cookierain from "$lib/modules/cookierain.svelte"
+    
     export let items = [ /* burde kunne ha så mange som man har lyst til */ 
         "item1",
         "item2",
@@ -10,7 +13,7 @@
         "seks"
     ];
     export let winner = undefined;
-    export let callback = () =>  {alert("Du vant " + winner)};
+    export let callback = () =>  {console.log("Du vant " + winner)};
     /**
      * Dette er en test
      * @param items
@@ -45,7 +48,9 @@
         aktiv.unshift(aktiv.pop());
         aktiv = aktiv;
     }
+    let won = false;
     async function openLootbox() {
+        let won = false;
         await sleep(1000);
         //bestem en vinner
         let vinner = finnRandom(items);
@@ -68,7 +73,7 @@
             await sleep(sleepTime)
         } 
         winner = vinner[0];
-
+        won = true;
         callback();
         await sleep(2000);
         if (resetKnappVis)
@@ -97,9 +102,13 @@
 -->
 
 <div class="altlootbox" in:slide out:slide>
+    {#if winner}
+        <Cookierain />
+    {/if}
 
     <div class="lootbox">
         <Gambling tittel="Lootbox"/>
+        <Resize width={1090}/>
         <div class="fade" transition:fade={{duration: 400}}>
             {#key aktiv}
             {#each aktiv as item, i}
@@ -125,6 +134,10 @@
 
 </div>
 <style>
+    :root {
+        --max: 40vw;
+        --min: 0vw;
+    }
     @keyframes update {
         0% {
             transform: scale(0.85);
@@ -143,6 +156,8 @@
 
     .knapp {
         text-align: center;
+        font-family: sans-serif;
+        font-weight: bold;
     }
     .lootbox {
         text-align: center;
@@ -152,12 +167,13 @@
     
     .item {
         display: inline-block;
-        padding: 1em;
-        margin: 1em;
+        padding: 2em;
+        margin: 1.5em;
         margin-bottom: 10em;
         border: 2px solid teal;
         width: 5em;
-        
+        font-weight: bolder;
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
 
     .ani {
@@ -168,7 +184,6 @@
         background: linear-gradient(gold, gold) no-repeat center/2px 100%;
         background-color: green;
         border: 3px solid gold;
-        padding: 1.8em;
+        padding: 2.5em;
     }
-
 </style>

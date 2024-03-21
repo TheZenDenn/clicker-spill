@@ -5,19 +5,22 @@
     import Lootbox from "$lib/modules/lootbox.svelte" 
     import * as gambling from "$lib/gambling";
     import {sleep} from "$lib/index";
+    import Resize from "$lib/modules/resize.svelte"
+    import Luckybox from "$lib/modules/luckybox.svelte";
 
     let settings = false;
 
     /**
      * Disable denne før production.
      */
-    const debug = true;
+    let debug = true;
     let debugPoeng = 0; 
 
     let antallFysiskeKlikk = 0;
     let antallCookiesTotalt = 0;
     let poeng = 0;
     let antallAutoOppgradering = 1;
+    let kjøpteLootbox = 0;
     /**
      * @type {Object}
      */
@@ -26,19 +29,26 @@
      * Viser errorfunds melding. Bruk errorFunds funksjon eller lag en lignende.
      */
     let error = false;
+    let timeForAutosave = 1000;
+    async function resetVars() {
+        console.log(1)
+        antallFysiskeKlikk = 0;
+        antallCookiesTotalt = 0;
+        poeng = 0;
+        antallAutoOppgradering = 1;
+        kjøpteLootbox = 0;
+        timeForAutosave = 100000;
+        await sleep(3600);
+        timeForAutosave = 1000;
+    }
 
     //få lagrede data først - hvis ikke default
     async function getSave() {
         let data = await localstorageAPI.getData();
         if (!data)
-            return; //defaults
-
-        //antallFysiskeKlikk = 
-        antallCookiesTotalt = data.AntallCookiesTotalt
-        poeng = data.Poeng
-        antallAutoOppgradering = data.CookiesPerSekund
-        aktivItems = data.ActiveItems
-        console.log(data)
+            return;
+        // @ts-ignore bc fuck readability 
+        antallCookiesTotalt = data.AntallCookiesTotalt; poeng = data.Poeng; antallAutoOppgradering = data.CookiesPerSekund;aktivItems = data.ActiveItems; kjøpteLootbox = data.KjøpteLootbox;
     }
     getSave();
     
@@ -53,12 +63,11 @@
         }
     }
 
-    let timeForAutosave = 10 * 1000;
     const autoSave = setInterval(async () => {
         //finn alle dataene 
-        let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems);
+        let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems, kjøpteLootbox);
         await localstorageAPI.writeData({...datastruct})
-        console.log("Wrote data")
+        console.log("saved")
     }, timeForAutosave);
 
     //Automatisk få kjeks hvert sekund
@@ -70,6 +79,7 @@
      * @param {number} pris
      * @param {number} addition
      * @param {string} navn
+     * @param {number} multiplier 
      */
     function upgrade(pris, addition, navn, multiplier) {
         if (aktivItems[navn])
@@ -91,19 +101,17 @@
      */
     let winner;
     const lootboxCB = async () => {
-        console.log(poeng);
         poeng = await gambling.lootBoxResults(winner, poeng);
-        console.log(poeng);
     }
 
-    function kjøpLootbox(pris = 1000) {
+    function kjøpLootbox(pris = (poeng/100)*10) {
         if (typeof(pris) != "number") 
             throw "pris trenger å bli gitt i svelte for en eller annen grunn. Dev feil fra deg, ikke meg";
 
         if (poeng < pris) 
             return errorFunds();
 
-        
+        kjøpteLootbox += 1;
         poeng -= pris;
         console.log(poeng, pris);
         lootboxVis = true;
@@ -115,12 +123,37 @@
         error = false;
     }
 
+    let luckyboxVis = false;
+    let luckyboxPoeng = undefined;
+    let visLuckyboxSpillIgjen = false;
+    function kjøpLuckybox() {
+        visLuckyboxSpillIgjen = false;
+        let pris = 2000//(poeng / 100) * 10;
+        if (poeng < pris)
+            return errorFunds();
+
+        poeng -= pris;
+        luckyboxPoeng = undefined;
+        luckyboxVis = true;
+    }
+    async function luckyboxCallback() {
+        console.log(1);
+        await sleep(2000);
+        visLuckyboxSpillIgjen = true;
+        //luckyboxVis = false;
+        //endre poeng 
+        console.log(luckyboxPoeng);
+        poeng += luckyboxPoeng;
+        //luckyboxPoeng = undefined;
+    }
+
 </script>
+    <Resize width={830} />
     {#if settings}
         <div class="settings">
-            test
-            <button on:click={() => settings = settings ? false : true}>Settings</button>
-            <button on:click={localstorageAPI.resetLagring}>Reset lagring</button>
+            <button on:click={() => debug = debug ? false : true}>Toggle debug mode</button>
+            <button on:click={() => settings = settings ? false : true}>Lukk instillinger</button>
+            <button on:click={() => {resetVars(); localstorageAPI.resetLagring()}}>Reset lagring</button>
         </div>
     {/if}
 
@@ -128,7 +161,7 @@
         Set poeng: <input type="number" bind:value={debugPoeng}> <button on:click={() => poeng = debugPoeng}>Set poeng</button>
     {/if}
     {#if error} 
-        <p>Ikke nok cookies!</p>
+        <p>Ikke nok cookies! Du er fattig</p>
     {/if}
     <div class="minigames">
         {#if lootboxVis}
@@ -136,6 +169,15 @@
             {#if winner}
             <button class="gamblingknapp" on:click={() => {lootboxVis = false; winner = undefined;}}>Lukk lootbox</button>
             <button id="spilligjen" class="gamblingknapp" on:click={async () => {lootboxVis = false; winner = undefined; await sleep(500); kjøpLootbox();}}>Spill igjen!</button>
+            {/if}
+        {:else if luckyboxVis}
+            <Luckybox callback={luckyboxCallback} bind:kjeks={luckyboxPoeng}/>
+            hei? 
+            {#if visLuckyboxSpillIgjen}
+                <div class="bro" style="position: absolute">
+                    <button class="gamblingknapp" on:click={() => {luckyboxVis = false; luckyboxPoeng = undefined;}}>Lukk Luckybox</button>
+                    <button id="spilligjen" class="gamblingknapp" on:click={async () => {luckyboxVis = false; luckyboxPoeng = undefined; await sleep(500); kjøpLuckybox();}}>Spill igjen</button>
+                </div>
             {/if}
         {/if}
     </div>
@@ -147,34 +189,62 @@
         {/key}
 
         <div class="stats grid">
-            <h1>Kjeks Clicker</h1>
-            <button on:click={() => settings = settings ? false : true}>Settings</button>
+        {#if poeng < 0}
+            <h1 style="color: brown;">Fattig</h1>
+        {/if}
+            <h1>Kjeks Klikker</h1>
+            <button on:click={() => settings = settings ? false : true}>Instillinger</button>
             <p>Cookes per sekund {Math.floor(antallAutoOppgradering)}</p>
-            <h2>Stats</h2>
-            <p>Poeng: {Math.floor(poeng)}</p>
-            <p>Antall cookies totalt {Math.floor(antallCookiesTotalt)}</p>
-            <button on:click={() => kjøpLootbox()}>Åpne Lootbox (1000 cookies)!</button>
-            <button>Spill Memory Card!</button>
-            <button>Spill Poker!</button>
-            <button>Spill Blackjack!</button>
-            <button>Spill Slots!</button>
+            <details open>
+                <summary><b>Statistikk<b/></summary>
+                <!-- lagre all relevant statestikk -->
+                <p>Poeng: {Math.floor(poeng)}🍪</p>
+                <p>Antall kjeks totalt: {Math.floor(antallCookiesTotalt)}🍪</p>
+                <p>Antall kjøpte lootboxer: {kjøpteLootbox}</p>
+            </details>
+            
+            
+            <button on:click={() => kjøpLootbox()}>Åpne Lootbox ({Math.abs(Math.floor((poeng/100)*10))}🍪)!</button>
+            <button on:click={kjøpLuckybox}>Spill Luckybox! (2000🍪)</button>
         </div>
 
-        <div class="shop grid">
+        <div class="shop grid" style="var(--image, {kjeks})">
             {#each items as item, i}
-                {#key aktivItems}
-                {#if aktivItems[item.navn]}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])} cookies</button>
-                {:else}
-                <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris} cookies</button>
+                {#if aktivItems}
+                    {#key aktivItems}
+                        {#if aktivItems[item.navn]}
+                        <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {Math.ceil(item.pris * item.multiplier * aktivItems[item.navn])}🍪 - {aktivItems[item.navn]} kjøpt</button>
+                        {:else}
+                        <button on:click={() => {upgrade(item.pris, item.addition, item.navn, item.multiplier)}}>{item.navn} - {item.pris}🍪 - 0 kjøpt</button>
+                        {/if}
+                    {/key}
                 {/if}
-                {/key}
+                
                 
             {/each}
         </div>
     
     </div>
+
 <style>
+    .bro {
+        text-align: center;
+        position: absolute;
+        top: 0;
+        z-index: 9999;
+        width: 100%;
+    }
+
+    :global(body) {
+        font-family: sans-serif;
+    }
+
+    :global(button) {
+        font-family: sans-serif;
+        font-weight: bolder !important;
+        background: none;
+    }
+
     @property --x {
     syntax: '<percentage>';
     inherits: false;
@@ -247,12 +317,18 @@
         width: 100%;
         gap: 0;
     } 
+
     .grid {
         display: inline-grid;
         overflow: scroll;
     }
 
     .shop button {
+        height: 70px;
+        gap: 0;
+    }
+
+    .stats button {
         height: 50px;
         gap: 0;
     }
