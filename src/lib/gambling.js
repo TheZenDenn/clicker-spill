@@ -1,5 +1,3 @@
-import { sleep } from "$lib/index";
-
 export const lootboxOptions1 = [
     "+100",
     "-1000",
@@ -19,7 +17,6 @@ export const lootboxOptions = lootboxOptions1.map((a) => a + cookieStr);
  * @returns {Promise<number>} poeng/cookies
  */
 export async function lootBoxResults(vinner, existingCookies) {
-    //test 
     let index = lootboxOptions1.indexOf(vinner.replace(cookieStr, ""));
     let prosent = Number(lootboxOptions1[index])/100;
     let change = existingCookies * prosent;

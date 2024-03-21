@@ -7,6 +7,13 @@ class menyitem {
     }
 }
 
+/**
+ * ignorer dette
+ * - Det er tusen måter å gjøre dette bedre på
+ * - Spesielt mtp. at dette følger et fast mønster.
+ * - Jeg skylder på Dennis som balanca dette, selv om jeg skrev originalen
+ * - Nok en feature i kodebasen vår
+ */
 export const items = [
     new menyitem(),
     new menyitem(1100, 10, "mother of cookies"),

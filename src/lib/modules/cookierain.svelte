@@ -5,18 +5,20 @@
         cookies.push("🍪");
     }
 </script>
-
+<!--
+    @component
+    
+    Bruk denne når du trenger et cookierain som kommer automatisk
+-->
 <div class="cookieraindiv">
     {#each cookies as cookie, i}
-    {#if (cookies.length / 2) < i}
-    <div class="cookierain right" style="margin-left: {(Math.random() * 80)}vw">{cookie}</div>
-    {:else}
-    <div class="cookierain left" style="margin-right: {(Math.random() * 80)}vw">{cookie}</div>
-    {/if}
-    
+        {#if (cookies.length / 2) < i}
+            <div class="cookierain right" style="margin-left: {(Math.random() * 80)}vw">{cookie}</div>
+        {:else}
+            <div class="cookierain left" style="margin-right: {(Math.random() * 80)}vw">{cookie}</div>
+        {/if}
     {/each}
 </div>
-
 
 <style>
     @keyframes cookierain {

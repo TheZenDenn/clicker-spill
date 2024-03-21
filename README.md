@@ -1,6 +1,9 @@
 # clicker spill
 Definitivt ikke et gambling spill
 
+### Hvem filer som faktisk spiller noen rolle
+- Egentlig alle assosiert med hovedsiden. Alle andre er egentlig bare der for debug. 
+
 ## git download
 https://git-scm.com/downloads
 

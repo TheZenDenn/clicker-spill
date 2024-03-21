@@ -170,13 +170,12 @@
         poeng += vinnerSlots;
         visSlotsSpillIgjenKnapp = true;
     }
-
 </script>
     {#if settings}
         <div class="settings">
             <button on:click={() => debug = debug ? false : true}>Toggle debug mode</button>
-            <button on:click={() => settings = settings ? false : true}>Lukk instillinger</button>
             <button on:click={() => {resetVars(); localstorageAPI.resetLagring()}}>Reset lagring</button>
+            <button on:click={() => settings = settings ? false : true}>Lukk instillinger</button>
         </div>
     {/if}
 
@@ -227,7 +226,11 @@
             <details open>
                 <summary><b>Statistikk<b/></summary>
                 <!-- lagre all relevant statestikk -->
-                <p>Poeng: {Math.floor(poeng)}🍪</p>
+                {#if poeng < 0}
+                    <p style="color: brown;">Poeng: {Math.floor(poeng)}🍪</p>
+                {:else}
+                    <p>Poeng: {Math.floor(poeng)}🍪</p>
+                {/if}
                 <p>Antall kjeks totalt: {Math.floor(antallCookiesTotalt)}🍪</p>
                 <p>Antall kjøpte lootboxer: {kjøpteLootbox}</p>
             </details>
@@ -250,7 +253,6 @@
             {/each}
         </div>
     </div>
-
 <style>
     .bro {
         text-align: center;

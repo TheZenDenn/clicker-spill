@@ -1,7 +1,6 @@
 <script>
     import {fade, slide, fly} from "svelte/transition";
     import Gambling from "$lib/modules/gambling.svelte"
-    import Resize from "$lib/modules/resize.svelte"
     import Cookierain from "$lib/modules/cookierain.svelte"
     
     export let items = [ /* burde kunne ha så mange som man har lyst til */ 
@@ -12,6 +11,9 @@
         "item5",
         "seks"
     ];
+    /**
+     * @type {undefined|string|number} idk på dette punktet
+     */
     export let winner = undefined;
     export let callback = () =>  {console.log("Du vant " + winner)};
     /**
@@ -42,13 +44,12 @@
     const sleep = (/** @type {number} */ ms) => new Promise(r => setTimeout(r, ms));
     function doBasic() {
         aniIndex++;
-            if (aniIndex > items.length)
-                aniIndex = 0;
+        if (aniIndex > items.length)
+            aniIndex = 0;
         
-        aktiv.unshift(aktiv.pop());
+        aktiv.unshift(aktiv.pop()); //sorcery
         aktiv = aktiv;
     }
-    let won = false;
     async function openLootbox() {
         let won = false;
         await sleep(1000);
@@ -57,30 +58,23 @@
         
         let times = 30;
         let sleepTime = 100;
-        /**
-         * Må gjøre denne frem til at aktiv[2] er den vi vil ha
-        */
+        
+        //Må gjøre denne frem til at aktiv[2] er den vi vil ha
         for (let i = 0; i < times; i++) {
             doBasic();
-            //gjør dette bedre - js er fortsatt js
             if (i > (times * 0.6)) { await sleep(sleepTime * 2); continue;}
             await sleep(sleepTime);
         }
         while (aktivString != vinner[0]) {
             doBasic()
             aktivString = aktiv[2]
-
             await sleep(sleepTime)
         } 
         winner = vinner[0];
         won = true;
         callback();
         await sleep(2000);
-        if (resetKnappVis)
-            knappVis = true;
-
     }
-    let knappVis = false; //legacy 
     openLootbox();
 </script>
 <!--
@@ -100,31 +94,28 @@
     <Lootbox items={items} bind:winner={vinner} resetKnappVis={false} />
     ```
 -->
-
 <div class="altlootbox" in:slide out:slide>
     {#if winner}
         <Cookierain />
     {/if}
-
     <div class="lootbox">
         <Gambling tittel="Lootbox"/>
-        <Resize width={1090}/>
         <div class="fade" transition:fade={{duration: 400}}>
             {#key aktiv}
             {#each aktiv as item, i}
                 {#if i < 5}
                     {#if i == 2} <!-- pain -->
-                    {#if aniIndex == i}
-                    <div class="item ani vinner">{item}</div>
+                        {#if aniIndex == i}
+                            <div class="item ani vinner">{item}</div>
+                        {:else}
+                            <div class="item vinner">{item}</div>
+                        {/if}
                     {:else}
-                    <div class="item vinner">{item}</div>
-                    {/if}
-                    {:else}
-                    {#if aniIndex == i}
-                    <div class="item ani">{item}</div>
-                    {:else}
-                    <div class="item">{item}</div>
-                    {/if}
+                        {#if aniIndex == i}
+                            <div class="item ani">{item}</div>
+                        {:else}
+                            <div class="item">{item}</div>
+                        {/if}
                     {/if}
                 {/if}
             {/each} 
