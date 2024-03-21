@@ -53,7 +53,7 @@
     }
     getSave();
     
-    //Trykke for på kjeksen for å få kjeks
+    //Trykke for på kjeksen for å få kjeks og få kjeks automatisk. Bestemmer antallet kjeks man får for hvert sekund 
     function faaPoeng(){
         poeng += antallAutoOppgradering
         antallCookiesTotalt += antallAutoOppgradering;
@@ -145,6 +145,8 @@
         //endre poeng 
         console.log(luckyboxPoeng);
         poeng += luckyboxPoeng;
+        //Sigma fix 
+        kjøpteLootbox += 1
         //luckyboxPoeng = undefined;
     }
 
