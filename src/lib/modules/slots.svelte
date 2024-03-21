@@ -3,7 +3,9 @@
   export let callback = () => {console.log('Du vant ' + vinner)}
   let number = ['---'];
   let info = 'Trykk pull for å starte';
+  let spill = true;
   function click() {
+      spill = false;
       let a = number[0] = Math.round(Math.random()*8+1);
       let b = number[1] = Math.round(Math.random()*8+1);
       let c = number[2] = Math.round(Math.random()*8+1);
@@ -45,7 +47,10 @@
   <hr>
   <br>
   <div class=button>
-  <button on:click={click}>Pull</button>
+    {#if spill}
+      <button on:click={click}>Pull</button>
+    {/if}
+  
   </div>
 </div>
 </body>

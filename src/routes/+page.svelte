@@ -69,7 +69,7 @@
         //finn alle dataene 
         let datastruct = new localstorageAPI.CookieDataStruct(poeng, antallCookiesTotalt, antallAutoOppgradering, aktivItems, kjøpteLootbox);
         await localstorageAPI.writeData({...datastruct})
-        console.log("saved")
+        //console.log("saved")
     }, timeForAutosave);
 
     //Automatisk få kjeks hvert sekund
@@ -157,23 +157,26 @@
     /**
      * @type {number|undefined}
      */
-    let vinnerSlots = undefined;
+    let vinnerSlots = 0;
     function slotsKjøp() {
+        visLuckyboxSpillIgjen = false;
         visSlots = false;
         if (slotsPris > poeng)
             return errorFunds()
 
         poeng -= slotsPris
-        vinnerSlots = undefined;
+        //vinnerSlots = undefined;
         visSlots = true;
-
+        visLuckyboxSpillIgjen = false;
+        console.log(visLuckyboxSpillIgjen)
     }
     
     async function slotsCB() {
         await sleep(2000);
-        poeng += vinnerSlots
+        console.log(vinnerSlots);
+        poeng += vinnerSlots;
         visSlotsSpillIgjenKnapp = true;
-
+        console.log(visLuckyboxSpillIgjen);
     }
 
 </script>
@@ -209,10 +212,10 @@
             {/if}
         {:else if visSlots}
                 <Slots bind:vinner={vinnerSlots} callback={slotsCB}/>
-                {#if visSlotsSpillIgjenKnapp}
+                {#if visSlotsSpillIgjenKnapp == true}
                     <div class="bro">
-                        <button class="gamblingknapp" on:click={() => {visSlots = false; vinnerSlots = undefined;}}>Lukk Slots</button>
-                        <button id="spilligjen" class="gamblingknapp" on:click={async () => {visSlots = false; vinnerSlots = undefined; await sleep(500); slotsKjøp();}}>Spill igjen</button>
+                        <button class="gamblingknapp" on:click={() => {visSlots = false;}}>Lukk Slots</button>
+                        <button id="spilligjen" class="gamblingknapp" on:click={async () => {visSlots = false;await sleep(500); slotsKjøp();}}>Spill igjen</button>
                     
                     </div>
                 {/if}
