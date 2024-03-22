@@ -7,6 +7,9 @@
 
 <style>
     :global(body) {
+        -webkit-user-select: none;
+        -ms-user-select: none; 
+        user-select: none; 
         overflow: hidden;
         margin: 0;
         padding: 0;
